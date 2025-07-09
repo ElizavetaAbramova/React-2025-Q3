@@ -1,0 +1,1 @@
+This personal repo is for [React course](https://rs.school/courses/reactjs) tasks.
