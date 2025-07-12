@@ -1,0 +1,13 @@
+.error-button-block {
+  display: flex;
+  justify-content: start;
+  padding: 10px 0;
+}
+
+.error-button {
+  background-color: brown;
+}
+
+.error-button:hover {
+  border-color: rgb(250, 64, 64);
+}
