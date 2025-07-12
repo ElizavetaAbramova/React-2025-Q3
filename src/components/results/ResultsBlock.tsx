@@ -35,13 +35,11 @@ class ResultsBlock extends Component<Props, State> {
     }
   }
 
-  async componentDidUpdate(prevProps: Props, prevState: State) {
+  async componentDidUpdate(prevProps: Props) {
     if (prevProps.searchQuery !== this.props.searchQuery) {
+      this.setState({ loading: true })
       const results = await getItems(this.props.searchQuery)
       this.setState({ results, loading: false })
-      console.log('result', prevProps, this.props, this.state.results, prevState)
-      // this.renderContent()
-      // console.log('state', this.state.searchQuery)
     }
   }
 
@@ -61,7 +59,12 @@ class ResultsBlock extends Component<Props, State> {
     if (loading) return <div>Loading...</div>
     if (error) return <div>Error: {error}</div>
 
-    return <div className="results-block">{this.renderContent()}</div>
+    return (
+      <div className="results-block">
+        <p className="results-header">Results for search: {this.props.searchQuery}</p>
+        {this.renderContent()}
+      </div>
+    )
   }
 }
 

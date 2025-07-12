@@ -15,26 +15,23 @@ interface State {
 class MainPage extends Component {
   constructor(props: object) {
     super(props)
-    this.handleSearch = this.handleSearch.bind(this)
   }
 
   state: State = {
-    //check LS, if it is not empty, take the last
     searchQuery: '',
   }
 
-  handleSearch(query: string) {
-    console.log('onsearch', query)
+  handleSearch = (query: string) => {
     this.setState({ searchQuery: query })
   }
 
-  componentDidUpdate(prevProps: object, prevState: State) {
-    if (prevState.searchQuery !== this.state.searchQuery) {
-      console.log('state', this.state.searchQuery)
-    }
-  }
-
   render() {
+    const localStorageState = localStorage.getItem('AE-search-history')
+
+    if (localStorageState) {
+      const savedHistory = JSON.parse(localStorageState)
+      this.state.searchQuery = savedHistory[savedHistory.length - 1]
+    }
     return (
       <>
         <h1>What do you want to find?</h1>
