@@ -13,12 +13,20 @@ interface State {
 class SearchBar extends Component<SearchBarProps, State> {
   constructor(props: SearchBarProps) {
     super(props)
+    this.state = {
+      inputValue: '',
+      searchHistory: [],
+      showSearchHistory: false,
+    }
   }
 
-  state: State = {
-    inputValue: '',
-    searchHistory: [],
-    showSearchHistory: false,
+  componentDidMount = (): void => {
+    const localStorageState = localStorage.getItem('AE-search-history')
+
+    if (localStorageState) {
+      const savedHistory = JSON.parse(localStorageState)
+      this.setState({ searchHistory: savedHistory })
+    }
   }
 
   handleInputChange = (event: BaseSyntheticEvent) => {
@@ -29,18 +37,22 @@ class SearchBar extends Component<SearchBarProps, State> {
     const input = this.state.inputValue
     if (input.length !== 0) {
       this.props.onSearch(input)
-      const searchHistory: string[] = []
+      const searchHistoryDropdownList: string[] = []
       const localStorageState = localStorage.getItem('AE-search-history')
+
       if (localStorageState) {
         const savedHistory: string[] = JSON.parse(localStorageState)
         savedHistory.map((item) => {
           if (item !== input) {
-            searchHistory.push(item)
+            searchHistoryDropdownList.push(item)
           }
         })
       }
-      searchHistory.push(input)
-      localStorage.setItem('AE-search-history', JSON.stringify(searchHistory))
+      searchHistoryDropdownList.push(input)
+      localStorage.setItem('AE-search-history', JSON.stringify(searchHistoryDropdownList))
+      this.setState({ searchHistory: searchHistoryDropdownList })
+    } else {
+      this.props.onSearch('')
     }
   }
 
@@ -62,13 +74,6 @@ class SearchBar extends Component<SearchBarProps, State> {
   }
 
   render() {
-    const localStorageState = localStorage.getItem('AE-search-history')
-
-    if (localStorageState) {
-      const savedHistory = JSON.parse(localStorageState)
-      this.state.searchHistory = savedHistory
-    }
-
     return (
       <div className="search-bar">
         <div className="search-input-block">
@@ -94,7 +99,7 @@ class SearchBar extends Component<SearchBarProps, State> {
             </ul>
           )}
         </div>
-        <button className="search-button" onClick={this.handleSearchClick}>
+        <button className="search-button" onMouseDown={this.handleSearchClick}>
           Search
         </button>
       </div>

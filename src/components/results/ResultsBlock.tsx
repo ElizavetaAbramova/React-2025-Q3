@@ -25,7 +25,7 @@ class ResultsBlock extends Component<Props, State> {
     error: null,
   }
 
-  async componentDidMount() {
+  componentDidMount = async (): Promise<void> => {
     try {
       const results = await getItems(this.props.searchQuery)
       this.setState({ results, loading: false })
@@ -35,7 +35,7 @@ class ResultsBlock extends Component<Props, State> {
     }
   }
 
-  async componentDidUpdate(prevProps: Props) {
+  componentDidUpdate = async (prevProps: Props): Promise<void> => {
     if (prevProps.searchQuery !== this.props.searchQuery) {
       this.setState({ loading: true })
       const results = await getItems(this.props.searchQuery)
@@ -59,12 +59,7 @@ class ResultsBlock extends Component<Props, State> {
     if (loading) return <div>Loading...</div>
     if (error) return <div>Error: {error}</div>
 
-    return (
-      <div className="results-block">
-        <p className="results-header">Results for search: {this.props.searchQuery}</p>
-        {this.renderContent()}
-      </div>
-    )
+    return <div className="results-block">{this.renderContent()}</div>
   }
 }
 

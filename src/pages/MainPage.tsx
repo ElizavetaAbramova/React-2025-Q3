@@ -12,29 +12,31 @@ interface State {
   searchQuery: string
 }
 
-class MainPage extends Component {
+class MainPage extends Component<object, State> {
   constructor(props: object) {
     super(props)
+    this.state = {
+      searchQuery: '',
+    }
   }
 
-  state: State = {
-    searchQuery: '',
-  }
+  componentDidMount = (): void => {
+    const localStorageState = localStorage.getItem('AE-search-history')
 
+    if (localStorageState) {
+      const savedHistory = JSON.parse(localStorageState)
+      const lastSearchString = savedHistory[savedHistory - 1]
+      this.setState({ searchQuery: lastSearchString })
+    }
+  }
   handleSearch = (query: string) => {
     this.setState({ searchQuery: query })
   }
 
   render() {
-    const localStorageState = localStorage.getItem('AE-search-history')
-
-    if (localStorageState) {
-      const savedHistory = JSON.parse(localStorageState)
-      this.state.searchQuery = savedHistory[savedHistory.length - 1]
-    }
     return (
       <>
-        <h1>What do you want to find?</h1>
+        <h1>What are you looking for?</h1>
         <ErrorBoundary fallback={<p>Something went wrong, try to reload page</p>}>
           <SearchBar onSearch={this.handleSearch}></SearchBar>
           <ErrorButton></ErrorButton>
