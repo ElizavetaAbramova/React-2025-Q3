@@ -15,28 +15,18 @@ interface State {
 }
 
 interface Props {
-  searchQuery: string
+  searchQuery: string | null
 }
 
 class ResultsBlock extends Component<Props, State> {
   state: State = {
     results: [],
-    loading: true,
+    loading: false,
     error: null,
   }
 
-  componentDidMount = async (): Promise<void> => {
-    try {
-      const results = await getItems(this.props.searchQuery)
-      this.setState({ results, loading: false })
-    } catch (err) {
-      const error = err instanceof Error ? err.message : 'Unknown error'
-      this.setState({ error, loading: false })
-    }
-  }
-
   componentDidUpdate = async (prevProps: Props): Promise<void> => {
-    if (prevProps.searchQuery !== this.props.searchQuery) {
+    if (prevProps.searchQuery !== this.props.searchQuery && this.props.searchQuery !== null) {
       this.setState({ loading: true })
       const results = await getItems(this.props.searchQuery)
       this.setState({ results, loading: false })
@@ -44,9 +34,9 @@ class ResultsBlock extends Component<Props, State> {
   }
 
   renderContent() {
-    const { results } = this.state
+    const { results, loading } = this.state
 
-    if (results.length === 0) {
+    if (results.length === 0 && !loading && this.props.searchQuery !== null) {
       return <p>No results</p>
     }
 

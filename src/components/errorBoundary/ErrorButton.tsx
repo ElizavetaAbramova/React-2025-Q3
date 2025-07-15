@@ -11,7 +11,7 @@ class ErrorButton extends Component {
 
   render() {
     if (this.state.shouldThrow) {
-      throw new Error('error from render')
+      throw new Error('error in render')
     }
 
     return (

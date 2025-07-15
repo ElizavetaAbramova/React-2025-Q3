@@ -9,26 +9,17 @@ import ErrorButton from '../components/errorBoundary/ErrorButton'
 import ErrorBoundary from '../components/errorBoundary/ErrorBoundary'
 
 interface State {
-  searchQuery: string
+  searchQuery: string | null
 }
 
 class MainPage extends Component<object, State> {
   constructor(props: object) {
     super(props)
     this.state = {
-      searchQuery: '',
+      searchQuery: null,
     }
   }
 
-  componentDidMount = (): void => {
-    const localStorageState = localStorage.getItem('AE-search-history')
-
-    if (localStorageState) {
-      const savedHistory = JSON.parse(localStorageState)
-      const lastSearchString = savedHistory[savedHistory - 1]
-      this.setState({ searchQuery: lastSearchString })
-    }
-  }
   handleSearch = (query: string) => {
     this.setState({ searchQuery: query })
   }

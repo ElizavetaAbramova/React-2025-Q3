@@ -6,7 +6,7 @@ interface SearchBarProps {
 
 interface State {
   inputValue: string
-  searchHistory: string[]
+  lastSavedSearch: string
   showSearchHistory: boolean
 }
 
@@ -15,17 +15,19 @@ class SearchBar extends Component<SearchBarProps, State> {
     super(props)
     this.state = {
       inputValue: '',
-      searchHistory: [],
+      lastSavedSearch: '',
       showSearchHistory: false,
     }
   }
 
   componentDidMount = (): void => {
-    const localStorageState = localStorage.getItem('AE-search-history')
+    const lastSearch = localStorage.getItem('AE-search-history')
 
-    if (localStorageState) {
-      const savedHistory = JSON.parse(localStorageState)
-      this.setState({ searchHistory: savedHistory })
+    if (lastSearch) {
+      this.setState({
+        lastSavedSearch: lastSearch,
+        inputValue: lastSearch,
+      })
     }
   }
 
@@ -34,43 +36,14 @@ class SearchBar extends Component<SearchBarProps, State> {
   }
 
   handleSearchClick = () => {
-    const input = this.state.inputValue
+    const input = this.state.inputValue.trim()
     if (input.length !== 0) {
       this.props.onSearch(input)
-      const searchHistoryDropdownList: string[] = []
-      const localStorageState = localStorage.getItem('AE-search-history')
-
-      if (localStorageState) {
-        const savedHistory: string[] = JSON.parse(localStorageState)
-        savedHistory.map((item) => {
-          if (item !== input) {
-            searchHistoryDropdownList.push(item)
-          }
-        })
-      }
-      searchHistoryDropdownList.push(input)
-      localStorage.setItem('AE-search-history', JSON.stringify(searchHistoryDropdownList))
-      this.setState({ searchHistory: searchHistoryDropdownList })
+      localStorage.setItem('AE-search-history', input)
+      this.setState({ lastSavedSearch: input })
     } else {
       this.props.onSearch('')
     }
-  }
-
-  handleInputFocus = () => {
-    this.setState({
-      showSearchHistory: true,
-    })
-  }
-
-  handleHistoryClick = (item: string) => {
-    this.setState({
-      inputValue: item,
-      showSearchHistory: false,
-    })
-  }
-
-  handleInputBlur = () => {
-    this.setState({ showSearchHistory: false })
   }
 
   render() {
@@ -80,24 +53,9 @@ class SearchBar extends Component<SearchBarProps, State> {
           <input
             className="search-input"
             placeholder="ex.: apple"
-            value={this.state.inputValue}
             onChange={this.handleInputChange}
-            onFocus={this.handleInputFocus}
-            onBlur={this.handleInputBlur}
+            value={this.state.inputValue}
           ></input>
-          {this.state.showSearchHistory && this.state.searchHistory.length !== 0 && (
-            <ul className="search-history-dropdown">
-              {this.state.searchHistory.map((item, index) => (
-                <li
-                  key={index}
-                  className="search-history-item"
-                  onMouseDown={() => this.handleHistoryClick(item)}
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
         <button className="search-button" onMouseDown={this.handleSearchClick}>
           Search
