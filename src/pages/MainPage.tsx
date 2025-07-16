@@ -7,9 +7,12 @@ import SearchBar from '../components/search/SearchBar'
 import ResultsBlock from '../components/results/ResultsBlock'
 import ErrorButton from '../components/errorBoundary/ErrorButton'
 import ErrorBoundary from '../components/errorBoundary/ErrorBoundary'
+import getItems from '../api/getItems'
 
 interface State {
   searchQuery: string | null
+  searchResult: []
+  status: 'error' | 'loading' | 'fulfilled' | 'empty'
 }
 
 class MainPage extends Component<object, State> {
@@ -17,11 +20,24 @@ class MainPage extends Component<object, State> {
     super(props)
     this.state = {
       searchQuery: null,
+      searchResult: [],
+      status: 'empty',
     }
   }
 
-  handleSearch = (query: string) => {
+  handleSearch = async (query: string) => {
+    this.setState({ status: 'loading' })
     this.setState({ searchQuery: query })
+    await this.getResults(query)
+  }
+
+  getResults = async (query: string) => {
+    try {
+      const results = await getItems(query)
+      this.setState({ searchResult: results, status: 'fulfilled' })
+    } catch {
+      this.setState({ status: 'error' })
+    }
   }
 
   render() {
@@ -31,7 +47,11 @@ class MainPage extends Component<object, State> {
         <ErrorBoundary fallback={<p>Something went wrong, try to reload page</p>}>
           <SearchBar onSearch={this.handleSearch}></SearchBar>
           <ErrorButton></ErrorButton>
-          <ResultsBlock searchQuery={this.state.searchQuery}></ResultsBlock>
+          <ResultsBlock
+            searchResult={this.state.searchResult}
+            searchQuery={this.state.searchQuery}
+            status={this.state.status}
+          ></ResultsBlock>
         </ErrorBoundary>
       </>
     )
