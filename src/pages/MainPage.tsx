@@ -26,14 +26,10 @@ class MainPage extends Component<object, State> {
   }
 
   handleSearch = async (query: string) => {
-    this.setState({ status: 'loading' })
-    this.setState({ searchQuery: query })
-    await this.getResults(query)
-  }
-
-  getResults = async (query: string) => {
+    this.setState({ searchQuery: query, status: 'loading' })
     try {
       const results = await getItems(query)
+      console.log(results)
       this.setState({ searchResult: results, status: 'fulfilled' })
     } catch {
       this.setState({ status: 'error' })
@@ -41,6 +37,7 @@ class MainPage extends Component<object, State> {
   }
 
   render() {
+    console.log(this.state)
     return (
       <>
         <h1>What are you looking for?</h1>

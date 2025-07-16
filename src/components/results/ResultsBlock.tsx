@@ -21,7 +21,8 @@ class ResultsBlock extends Component<Props> {
     if (this.props.status === 'loading') {
       return <p>Loading...</p>
     }
-    if (this.props.searchResult && this.props.searchQuery && this.props.status) {
+
+    if (this.props.searchResult && this.props.status) {
       if (this.props.searchResult.length === 0 && this.props.searchQuery !== null) {
         return <p>No results</p>
       }

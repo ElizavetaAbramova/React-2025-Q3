@@ -9,7 +9,6 @@ describe('ResultsBlock', () => {
       { id: 1, title: 'string', description: 'test' },
       { id: 2, title: 'string', description: 'test' },
     ]
-
     const { rerender } = render(
       <ResultsBlock searchQuery="" searchResult={searchResultMock} status="fulfilled" />,
     )
@@ -24,18 +23,14 @@ describe('ResultsBlock', () => {
     rerender(
       <ResultsBlock searchQuery="" searchResult={searchResultSecondMock} status="fulfilled" />,
     )
-
     expect(document.querySelector('.results-block')).toBeInTheDocument()
     expect(document.querySelectorAll('.result-card').length).toBe(searchResultSecondMock.length)
   })
 
   it('displays "no results" message when data array is empty', async () => {
     const searchResultMock: [] = []
-    const { rerender } = render(
-      <ResultsBlock searchQuery="" searchResult={searchResultMock} status="empty" />,
-    )
-    expect(screen.getByText('No results')).toBeInTheDocument()
-    rerender(<ResultsBlock searchQuery="" searchResult={searchResultMock} status="fulfilled" />)
+    render(<ResultsBlock searchQuery="" searchResult={searchResultMock} status="fulfilled" />)
+    expect(document.querySelector('.results-block')).toBeInTheDocument()
     expect(screen.getByText('No results')).toBeInTheDocument()
   })
 
@@ -50,9 +45,7 @@ describe('ResultsBlock', () => {
       { id: 2, title: 'string2', description: 'test2' },
       { id: 3, title: 'string3', description: 'test3' },
     ]
-
     render(<ResultsBlock searchQuery="" searchResult={searchResultMock} status="fulfilled" />)
-
     for (const item of searchResultMock) {
       expect(screen.getByText(item.title)).toBeInTheDocument()
       expect(screen.getByText(item.description)).toBeInTheDocument()
