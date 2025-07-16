@@ -20,6 +20,10 @@ class ErrorBoundary extends Component<Props, State> {
     }
   }
 
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Caught error in ErrorBoundary:', error, errorInfo)
+  }
+
   render() {
     if (this.state.hasError) {
       return this.props.fallback
