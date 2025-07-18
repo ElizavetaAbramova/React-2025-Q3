@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import ErrorBoundary from '../errorBoundary/ErrorBoundary'
 import ErrorButton from '../errorBoundary/ErrorButton'
 import { render, screen } from '@testing-library/react'
@@ -10,10 +10,6 @@ const BrokenComponent = () => {
 }
 
 describe('ErrorBoundary', () => {
-  beforeEach(() => {
-    vi.spyOn(console, 'error').mockImplementation(() => {})
-  })
-
   it('catches and handles JavaScript errors in child components', () => {
     render(
       <ErrorBoundary fallback={<p>Something went wrong</p>}>
@@ -46,10 +42,6 @@ describe('ErrorBoundary', () => {
 })
 
 describe('ErrorButton', () => {
-  beforeEach(() => {
-    vi.spyOn(console, 'error').mockImplementation(() => {})
-  })
-
   it('throws error when test button is clicked', async () => {
     render(
       <ErrorBoundary fallback={<p role="alert">Fallback after error</p>}>
@@ -59,7 +51,7 @@ describe('ErrorButton', () => {
     const button = screen.getByText('Make an error')
     await userEvent.click(button)
     expect(screen.getByRole('alert')).toHaveTextContent('Fallback after error')
-    expect(screen.queryByText('Make an error')).not.toBeInTheDocument()
+    expect(button).not.toBeInTheDocument()
   })
 
   it('triggers error boundary fallback UI after error', async () => {

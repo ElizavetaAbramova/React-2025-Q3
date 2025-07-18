@@ -20,7 +20,7 @@ describe('MainPage', () => {
   it('handles search term from localStorage on initial load', () => {
     localStorage.setItem('AE-search-history', 'testing')
     render(<MainPage />)
-    const input: HTMLInputElement = screen.getByRole('textbox')
+    const input: HTMLInputElement = screen.getByPlaceholderText('ex.: apple')
     expect(input).toBeInTheDocument()
     expect(input.value).toBe('testing')
   })

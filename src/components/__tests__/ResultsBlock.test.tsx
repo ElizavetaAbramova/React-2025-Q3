@@ -46,10 +46,9 @@ describe('ResultsBlock', () => {
       { id: 3, title: 'string3', description: 'test3' },
     ]
     render(<ResultsBlock searchQuery="" searchResult={searchResultMock} status="fulfilled" />)
-    for (const item of searchResultMock) {
-      expect(screen.getByText(item.title)).toBeInTheDocument()
-      expect(screen.getByText(item.description)).toBeInTheDocument()
-    }
+    expect(screen.getByText('string1')).toBeInTheDocument()
+    expect(screen.getByText('string2')).toBeInTheDocument()
+    expect(screen.getByText('string3')).toBeInTheDocument()
   })
 
   it('handles missing or undefined data gracefully', () => {

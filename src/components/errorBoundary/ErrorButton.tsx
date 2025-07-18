@@ -16,7 +16,7 @@ class ErrorButton extends Component {
 
     return (
       <div className="error-button-block">
-        <button className="error-button" onClick={this.handleClick}>
+        <button className="error-button" name="Error-button" onClick={this.handleClick}>
           Make an error
         </button>
       </div>
