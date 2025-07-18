@@ -49,15 +49,15 @@ class SearchBar extends Component<SearchBarProps, State> {
   render() {
     return (
       <div className="search-bar">
-        <div className="search-input-block">
-          <input
-            className="search-input"
-            placeholder="ex.: apple"
-            onChange={this.handleInputChange}
-            value={this.state.inputValue}
-          ></input>
-        </div>
-        <button className="search-button" onMouseDown={this.handleSearchClick}>
+        <input
+          name="Search"
+          className="search-input"
+          placeholder="ex.: apple"
+          onChange={this.handleInputChange}
+          value={this.state.inputValue}
+        ></input>
+
+        <button className="search-button" name="Search" onMouseDown={this.handleSearchClick}>
           Search
         </button>
       </div>
