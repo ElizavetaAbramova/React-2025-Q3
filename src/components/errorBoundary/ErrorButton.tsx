@@ -11,12 +11,12 @@ class ErrorButton extends Component {
 
   render() {
     if (this.state.shouldThrow) {
-      throw new Error('error from render')
+      throw new Error('error in render')
     }
 
     return (
       <div className="error-button-block">
-        <button className="error-button" onClick={this.handleClick}>
+        <button className="error-button" name="Error-button" onClick={this.handleClick}>
           Make an error
         </button>
       </div>
