@@ -1,5 +1,5 @@
-import { Component } from 'react'
 import Card from './Card'
+import type { Status } from '../../types/Status'
 
 interface Item {
   id: number
@@ -9,31 +9,27 @@ interface Item {
 interface Props {
   searchResult?: Item[]
   searchQuery?: string | null
-  status?: 'error' | 'loading' | 'fulfilled' | 'empty'
+  status?: Status
 }
 
-class ResultsBlock extends Component<Props> {
-  renderContent() {
-    if (this.props.status === 'error') {
+export default function ResultsBlock(props: Props) {
+  const renderContent = () => {
+    if (props.status === 'error') {
       return <p>Error: could not get response from server</p>
     }
 
-    if (this.props.status === 'loading') {
+    if (props.status === 'loading') {
       return <p>Loading...</p>
     }
 
-    if (this.props.searchResult && this.props.status) {
-      if (this.props.searchResult.length === 0 && this.props.searchQuery !== null) {
+    if (props.searchResult && props.status) {
+      if (props.searchResult.length === 0 && props.searchQuery !== null) {
         return <p>No results</p>
       }
 
-      return this.props.searchResult.map((item: Item) => <Card key={item.id} data={item} />)
+      return props.searchResult.map((item: Item) => <Card key={item.id} data={item} />)
     }
   }
 
-  render() {
-    return <div className="results-block">{this.renderContent()}</div>
-  }
+  return <div className="results-block">{renderContent()}</div>
 }
-
-export default ResultsBlock

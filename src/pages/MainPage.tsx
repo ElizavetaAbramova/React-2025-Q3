@@ -8,8 +8,7 @@ import ResultsBlock from '../components/results/ResultsBlock'
 import ErrorButton from '../components/errorBoundary/ErrorButton'
 import ErrorBoundary from '../components/errorBoundary/ErrorBoundary'
 import getItems from '../api/getItems'
-
-type Status = 'error' | 'loading' | 'fulfilled' | 'empty'
+import type { Status } from '../types/Status'
 
 export default function MainPage() {
   const [searchQuery, setSearchQuery] = useState<string | null>(null)
