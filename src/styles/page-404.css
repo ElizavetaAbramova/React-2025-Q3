@@ -1,0 +1,19 @@
+.page-404 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.back-button {
+  color: aliceblue;
+}
+
+.image-404 {
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.image-404:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
