@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 interface SearchBarProps {
   onSearch: (query: string) => void
@@ -6,18 +7,18 @@ interface SearchBarProps {
 
 export default function SearchBar(props: SearchBarProps) {
   const [input, setInput] = useState('')
+  const [searchHistory, setSearchHistory] = useLocalStorage('AE-search-history')
 
   useEffect(() => {
-    const lastSearch = localStorage.getItem('AE-search-history')
-    if (lastSearch) {
-      setInput(lastSearch)
+    if (searchHistory) {
+      setInput(searchHistory)
     }
-  }, [])
+  }, [searchHistory])
 
   const handleSearchClick = () => {
     if (input.length !== 0) {
       props.onSearch(input)
-      localStorage.setItem('AE-search-history', input)
+      setSearchHistory(input)
     } else {
       props.onSearch('')
     }
