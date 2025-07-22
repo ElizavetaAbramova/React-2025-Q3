@@ -5,7 +5,6 @@ import '../styles/error-button.css'
 import { useState } from 'react'
 import SearchBar from '../components/search/SearchBar'
 import ResultsBlock from '../components/results/ResultsBlock'
-import ErrorButton from '../components/errorBoundary/ErrorButton'
 import ErrorBoundary from '../components/errorBoundary/ErrorBoundary'
 import getItems from '../api/getItems'
 import type { Status } from '../types/Status'
@@ -32,7 +31,6 @@ export default function MainPage() {
       <h1>What are you looking for?</h1>
       <ErrorBoundary fallback={<p>Something went wrong, try to reload page</p>}>
         <SearchBar onSearch={handleSearch}></SearchBar>
-        <ErrorButton></ErrorButton>
         <ResultsBlock
           searchResult={searchResult}
           searchQuery={searchQuery}
