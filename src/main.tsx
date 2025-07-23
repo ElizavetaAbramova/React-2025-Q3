@@ -1,16 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
-import { BrowserRouter } from 'react-router'
 import ErrorBoundary from './components/errorBoundary/ErrorBoundary.tsx'
+import { RouterProvider } from 'react-router-dom'
+import { router } from './routes/router.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <ErrorBoundary fallback={<p>Unexpected error</p>}>
-        <App />
-      </ErrorBoundary>
-    </BrowserRouter>
+    <ErrorBoundary fallback={<p>Unexpected error</p>}>
+      <RouterProvider router={router}></RouterProvider>
+    </ErrorBoundary>
   </StrictMode>,
 )
