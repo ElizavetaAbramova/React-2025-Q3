@@ -1,7 +1,6 @@
 import '../styles/search.css'
 import '../styles/card.css'
 import '../styles/results-block.css'
-import '../styles/error-button.css'
 import { useState } from 'react'
 import SearchBar from '../components/search/SearchBar'
 import ResultsBlock from '../components/results/ResultsBlock'
