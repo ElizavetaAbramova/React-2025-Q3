@@ -10,6 +10,7 @@ vi.mock('../../api/getItems', () => ({
 const mockedGetItems = vi.mocked(getItems)
 
 import MainPage from '../../pages/MainPage'
+import { MemoryRouter } from 'react-router'
 
 describe('MainPage', () => {
   beforeEach(() => {
@@ -18,7 +19,8 @@ describe('MainPage', () => {
   })
 
   it('handles search term from localStorage on initial load', () => {
-    localStorage.setItem('AE-search-history', 'testing')
+    const stored = JSON.stringify('testing')
+    localStorage.setItem('AE-search-history', stored)
     render(<MainPage />)
     const input: HTMLInputElement = screen.getByPlaceholderText('ex.: apple')
     expect(input).toBeInTheDocument()
@@ -53,12 +55,16 @@ describe('MainPage', () => {
 
   it('handles successful API responses', async () => {
     const mockResults = [
-      { id: 11, title: 'Apple', description: 'Juicy and green' },
-      { id: 22, title: 'Orange', description: 'Sour and orange' },
-      { id: 33, title: 'Banana', description: 'Sweet and yellow' },
+      { id: 11, title: 'Apple', images: 'test.png', brand: 'Gussi' },
+      { id: 22, title: 'Orange', images: 'test.png', brand: 'Gussi' },
+      { id: 33, title: 'Banana', images: 'test.png', brand: 'Gussi' },
     ]
     mockedGetItems.mockResolvedValue(mockResults)
-    render(<MainPage />)
+    render(
+      <MemoryRouter>
+        <MainPage />
+      </MemoryRouter>,
+    )
     const button = screen.getByRole('button', { name: 'Search' })
     await userEvent.click(button)
     expect(screen.getByText('Apple')).toBeInTheDocument()
@@ -76,15 +82,19 @@ describe('MainPage', () => {
 
   it('updates component state based on API responses', async () => {
     mockedGetItems.mockResolvedValueOnce([
-      { id: 1, title: 'Test 1', description: 'test' },
-      { id: 2, title: 'Test 2', description: 'test test' },
+      { id: 1, title: 'Test 1', images: 'test.png', brand: 'Gussi' },
+      { id: 2, title: 'Test 2', images: 'test.png', brand: 'Prada' },
     ])
-    render(<MainPage />)
+    render(
+      <MemoryRouter>
+        <MainPage />
+      </MemoryRouter>,
+    )
     const button = screen.getByRole('button', { name: 'Search' })
     await userEvent.click(button)
 
     expect(screen.getByText('Test 1')).toBeInTheDocument()
-    expect(screen.getByText('test test')).toBeInTheDocument()
+    expect(screen.getByText('Gussi')).toBeInTheDocument()
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
     expect(screen.queryByText('No results')).not.toBeInTheDocument()
     expect(screen.queryByText('Kiwi')).not.toBeInTheDocument()

@@ -2,26 +2,31 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import '@testing-library/jest-dom'
 import ResultsBlock from '../results/ResultsBlock'
+import { MemoryRouter } from 'react-router'
 
 describe('ResultsBlock', () => {
   it('renders correct number of items when data is provided', async () => {
     const searchResultMock = [
-      { id: 1, title: 'string', description: 'test' },
-      { id: 2, title: 'string', description: 'test' },
+      { id: 1, title: 'string', images: 'test.png', brand: 'Gussi' },
+      { id: 2, title: 'string', images: 'test.png', brand: 'Gussi' },
     ]
     const { rerender } = render(
-      <ResultsBlock searchQuery="" searchResult={searchResultMock} status="fulfilled" />,
+      <MemoryRouter>
+        <ResultsBlock searchQuery="" searchResult={searchResultMock} status="fulfilled" />
+      </MemoryRouter>,
     )
     expect(document.querySelector('.results-block')).toBeInTheDocument()
     expect(document.querySelectorAll('.result-card').length).toBe(searchResultMock.length)
 
     const searchResultSecondMock = [
-      { id: 1, title: 'test', description: 'string' },
-      { id: 2, title: 'test', description: 'string' },
-      { id: 3, title: 'test', description: 'string' },
+      { id: 1, title: 'test', images: 'test.png', brand: 'Gussi' },
+      { id: 2, title: 'test', images: 'test.png', brand: 'Gussi' },
+      { id: 3, title: 'test', images: 'test.png', brand: 'Gussi' },
     ]
     rerender(
-      <ResultsBlock searchQuery="" searchResult={searchResultSecondMock} status="fulfilled" />,
+      <MemoryRouter>
+        <ResultsBlock searchQuery="" searchResult={searchResultSecondMock} status="fulfilled" />,
+      </MemoryRouter>,
     )
     expect(document.querySelector('.results-block')).toBeInTheDocument()
     expect(document.querySelectorAll('.result-card').length).toBe(searchResultSecondMock.length)
@@ -41,11 +46,15 @@ describe('ResultsBlock', () => {
 
   it('correctly displays item names and descriptions', () => {
     const searchResultMock = [
-      { id: 1, title: 'string1', description: 'test1' },
-      { id: 2, title: 'string2', description: 'test2' },
-      { id: 3, title: 'string3', description: 'test3' },
+      { id: 1, title: 'string1', images: 'test.png', brand: 'Gussi' },
+      { id: 2, title: 'string2', images: 'test.png', brand: 'Gussi' },
+      { id: 3, title: 'string3', images: 'test.png', brand: 'Gussi' },
     ]
-    render(<ResultsBlock searchQuery="" searchResult={searchResultMock} status="fulfilled" />)
+    render(
+      <MemoryRouter>
+        <ResultsBlock searchQuery="" searchResult={searchResultMock} status="fulfilled" />
+      </MemoryRouter>,
+    )
     expect(screen.getByText('string1')).toBeInTheDocument()
     expect(screen.getByText('string2')).toBeInTheDocument()
     expect(screen.getByText('string3')).toBeInTheDocument()

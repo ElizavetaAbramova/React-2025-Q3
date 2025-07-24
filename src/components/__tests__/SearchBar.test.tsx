@@ -19,7 +19,7 @@ describe('SearchBar', () => {
   })
 
   it('displays previously saved search term from localStorage on mount', () => {
-    const lastSavedSearch = 'grape'
+    const lastSavedSearch = JSON.stringify('grape')
     localStorage.setItem('AE-search-history', lastSavedSearch)
 
     render(<SearchBar onSearch={mockOnSearch} />)
@@ -52,7 +52,7 @@ describe('SearchBar', () => {
     await userEvent.type(input, 'kiwi')
     await userEvent.click(button)
 
-    const stored = localStorage.getItem('AE-search-history')
+    const stored = JSON.parse(localStorage.getItem('AE-search-history') || '')
     expect(stored).toContain('kiwi')
   })
 
@@ -64,7 +64,7 @@ describe('SearchBar', () => {
     await userEvent.type(input, '  mango  ')
     await userEvent.click(button)
 
-    const saved = localStorage.getItem('AE-search-history')
+    const saved = JSON.parse(localStorage.getItem('AE-search-history') || '')
     expect(saved).toContain('mango')
   })
 
@@ -81,7 +81,7 @@ describe('SearchBar', () => {
   })
 
   it('retrieves saved search term on component mount', () => {
-    const lastSavedSearch = 'carrot'
+    const lastSavedSearch = JSON.stringify('carrot')
     localStorage.setItem('AE-search-history', lastSavedSearch)
 
     render(<SearchBar onSearch={mockOnSearch} />)
@@ -91,7 +91,7 @@ describe('SearchBar', () => {
   })
 
   it('overwrites existing localStorage value when new search is performed', async () => {
-    const lastSavedSearch = 'banana'
+    const lastSavedSearch = JSON.stringify('banana')
     localStorage.setItem('AE-search-history', lastSavedSearch)
 
     render(<SearchBar onSearch={mockOnSearch} />)
@@ -107,7 +107,7 @@ describe('SearchBar', () => {
   })
 
   it('avoids duplicate entries in localStorage', async () => {
-    const lastSavedSearch = 'banana'
+    const lastSavedSearch = JSON.stringify('banana')
     localStorage.setItem('AE-search-history', lastSavedSearch)
 
     render(<SearchBar onSearch={mockOnSearch} />)
@@ -121,7 +121,7 @@ describe('SearchBar', () => {
     await userEvent.type(input, 'banana')
     await userEvent.click(button)
 
-    const updated = localStorage.getItem('AE-search-history')
+    const updated = JSON.parse(localStorage.getItem('AE-search-history') || '')
     expect(updated).toBe('banana')
     expect(updated).not.toContain('bananabanana')
   })
