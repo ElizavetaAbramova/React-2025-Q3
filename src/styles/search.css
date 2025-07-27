@@ -38,3 +38,13 @@
 .search-button {
   max-height: 45px;
 }
+
+@media (max-width: 410px) {
+  .main-text {
+    width: 70%;
+    margin: 20px auto;
+  }
+  .search-input {
+    max-width: 40%;
+  }
+}

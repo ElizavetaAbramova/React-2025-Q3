@@ -1,0 +1,6 @@
+.navbar {
+  font-size: 15px;
+  display: flex;
+  width: 50%;
+  gap: 0 10px;
+}

@@ -1,68 +1,42 @@
-import { Component, type BaseSyntheticEvent } from 'react'
+import { useEffect, useState } from 'react'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 interface SearchBarProps {
   onSearch: (query: string) => void
 }
 
-interface State {
-  inputValue: string
-  lastSavedSearch: string
-  showSearchHistory: boolean
-}
+export default function SearchBar(props: SearchBarProps) {
+  const [input, setInput] = useState('')
+  const [searchHistory, setSearchHistory] = useLocalStorage('AE-search-history')
 
-class SearchBar extends Component<SearchBarProps, State> {
-  constructor(props: SearchBarProps) {
-    super(props)
-    this.state = {
-      inputValue: '',
-      lastSavedSearch: '',
-      showSearchHistory: false,
+  useEffect(() => {
+    if (searchHistory) {
+      setInput(searchHistory)
     }
-  }
+  }, [searchHistory])
 
-  componentDidMount = (): void => {
-    const lastSearch = localStorage.getItem('AE-search-history')
-
-    if (lastSearch) {
-      this.setState({
-        lastSavedSearch: lastSearch,
-        inputValue: lastSearch,
-      })
-    }
-  }
-
-  handleInputChange = (event: BaseSyntheticEvent) => {
-    this.setState({ inputValue: event.target.value })
-  }
-
-  handleSearchClick = () => {
-    const input = this.state.inputValue.trim()
+  const handleSearchClick = () => {
     if (input.length !== 0) {
-      this.props.onSearch(input)
-      localStorage.setItem('AE-search-history', input)
-      this.setState({ lastSavedSearch: input })
+      props.onSearch(input.trim())
+      setSearchHistory(input.trim())
     } else {
-      this.props.onSearch('')
+      props.onSearch('')
     }
   }
 
-  render() {
-    return (
-      <div className="search-bar">
-        <input
-          name="Search"
-          className="search-input"
-          placeholder="ex.: apple"
-          onChange={this.handleInputChange}
-          value={this.state.inputValue}
-        ></input>
+  return (
+    <div className="search-bar">
+      <input
+        name="Search"
+        className="search-input"
+        placeholder="ex.: apple"
+        onChange={(event) => setInput(event.target.value)}
+        value={input}
+      ></input>
 
-        <button className="search-button" name="Search" onMouseDown={this.handleSearchClick}>
-          Search
-        </button>
-      </div>
-    )
-  }
+      <button className="search-button" name="Search" onClick={handleSearchClick}>
+        Search
+      </button>
+    </div>
+  )
 }
-
-export default SearchBar

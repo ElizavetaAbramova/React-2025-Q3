@@ -1,0 +1,39 @@
+.details-block {
+  height: 50%;
+  width: 50%;
+  margin: auto 0;
+  padding: 1rem 1rem 1rem 2rem;
+  border-radius: 8px;
+  background-color: #2e2e2e;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.close-button {
+  align-self: flex-end;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px 0;
+  font-size: 18px;
+}
+
+.product-img {
+  width: 250px;
+  height: 250px;
+}
+
+@media (max-width: 780px) {
+  .details-block {
+    height: 510px;
+    position: absolute;
+    top: 30%;
+  }
+  .product-img {
+    width: 150px;
+    height: 150px;
+  }
+}

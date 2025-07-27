@@ -10,6 +10,7 @@ vi.mock('../../api/getItems', () => ({
 const mockedGetItems = vi.mocked(getItems)
 
 import MainPage from '../../pages/MainPage'
+import { MemoryRouter } from 'react-router'
 
 describe('MainPage', () => {
   beforeEach(() => {
@@ -18,8 +19,13 @@ describe('MainPage', () => {
   })
 
   it('handles search term from localStorage on initial load', () => {
-    localStorage.setItem('AE-search-history', 'testing')
-    render(<MainPage />)
+    const stored = JSON.stringify('testing')
+    localStorage.setItem('AE-search-history', stored)
+    render(
+      <MemoryRouter>
+        <MainPage />
+      </MemoryRouter>,
+    )
     const input: HTMLInputElement = screen.getByPlaceholderText('ex.: apple')
     expect(input).toBeInTheDocument()
     expect(input.value).toBe('testing')
@@ -27,7 +33,11 @@ describe('MainPage', () => {
 
   it('manages loading states during API calls', async () => {
     mockedGetItems.mockReturnValue(new Promise(() => {}))
-    render(<MainPage />)
+    render(
+      <MemoryRouter>
+        <MainPage />
+      </MemoryRouter>,
+    )
     const button = screen.getByRole('button', { name: 'Search' })
     await userEvent.click(button)
 
@@ -35,30 +45,42 @@ describe('MainPage', () => {
   })
 
   it('calls API with correct parameters', async () => {
-    mockedGetItems.mockResolvedValue([])
-    render(<MainPage />)
+    mockedGetItems.mockResolvedValue({ list: [], total: 0, currentPage: 1 })
+    render(
+      <MemoryRouter>
+        <MainPage />
+      </MemoryRouter>,
+    )
     const input = screen.getByPlaceholderText('ex.: apple')
     const button = screen.getByRole('button', { name: 'Search' })
     await userEvent.click(button)
     await waitFor(() => {
-      expect(mockedGetItems).toBeCalledWith('')
+      expect(mockedGetItems).toBeCalledWith('', 0)
     })
 
     await userEvent.type(input, 'apple')
     await userEvent.click(button)
     await waitFor(() => {
-      expect(mockedGetItems).toBeCalledWith('apple')
+      expect(mockedGetItems).toBeCalledWith('apple', 0)
     })
   })
 
   it('handles successful API responses', async () => {
-    const mockResults = [
-      { id: 11, title: 'Apple', description: 'Juicy and green' },
-      { id: 22, title: 'Orange', description: 'Sour and orange' },
-      { id: 33, title: 'Banana', description: 'Sweet and yellow' },
-    ]
+    const mockResults = {
+      list: [
+        { id: 11, title: 'Apple', images: 'test.png', brand: 'Gussi' },
+        { id: 22, title: 'Orange', images: 'test.png', brand: 'Gussi' },
+        { id: 33, title: 'Banana', images: 'test.png', brand: 'Gussi' },
+      ],
+      total: 3,
+      currentPage: 1,
+    }
     mockedGetItems.mockResolvedValue(mockResults)
-    render(<MainPage />)
+    render(
+      <MemoryRouter>
+        <MainPage />
+      </MemoryRouter>,
+    )
     const button = screen.getByRole('button', { name: 'Search' })
     await userEvent.click(button)
     expect(screen.getByText('Apple')).toBeInTheDocument()
@@ -68,28 +90,39 @@ describe('MainPage', () => {
 
   it('handles API error responses', async () => {
     mockedGetItems.mockRejectedValueOnce(new Error('API failed'))
-    render(<MainPage />)
+    render(
+      <MemoryRouter>
+        <MainPage />
+      </MemoryRouter>,
+    )
     const button = screen.getByRole('button', { name: 'Search' })
     await userEvent.click(button)
     expect(screen.getByText('Error: could not get response from server')).toBeInTheDocument()
   })
 
   it('updates component state based on API responses', async () => {
-    mockedGetItems.mockResolvedValueOnce([
-      { id: 1, title: 'Test 1', description: 'test' },
-      { id: 2, title: 'Test 2', description: 'test test' },
-    ])
-    render(<MainPage />)
+    mockedGetItems.mockResolvedValueOnce({
+      list: [
+        { id: 1, title: 'Test 1', images: 'test.png' },
+        { id: 2, title: 'Test 2', images: 'test.png' },
+      ],
+      total: 2,
+      currentPage: 2,
+    })
+    render(
+      <MemoryRouter>
+        <MainPage />
+      </MemoryRouter>,
+    )
     const button = screen.getByRole('button', { name: 'Search' })
     await userEvent.click(button)
 
     expect(screen.getByText('Test 1')).toBeInTheDocument()
-    expect(screen.getByText('test test')).toBeInTheDocument()
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
     expect(screen.queryByText('No results')).not.toBeInTheDocument()
     expect(screen.queryByText('Kiwi')).not.toBeInTheDocument()
 
-    mockedGetItems.mockResolvedValueOnce([])
+    mockedGetItems.mockResolvedValueOnce({ list: [], total: 0, currentPage: 1 })
     await userEvent.click(button)
     expect(screen.getByText('No results')).toBeInTheDocument()
   })

@@ -1,9 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import ErrorBoundary from '../errorBoundary/ErrorBoundary'
-import ErrorButton from '../errorBoundary/ErrorButton'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import userEvent from '@testing-library/user-event'
 
 const BrokenComponent = () => {
   throw new Error('Test crash')
@@ -38,30 +36,5 @@ describe('ErrorBoundary', () => {
     )
 
     expect(errorSpy).toHaveBeenCalled()
-  })
-})
-
-describe('ErrorButton', () => {
-  it('throws error when test button is clicked', async () => {
-    render(
-      <ErrorBoundary fallback={<p role="alert">Fallback after error</p>}>
-        <ErrorButton />
-      </ErrorBoundary>,
-    )
-    const button = screen.getByText('Make an error')
-    await userEvent.click(button)
-    expect(screen.getByRole('alert')).toHaveTextContent('Fallback after error')
-    expect(button).not.toBeInTheDocument()
-  })
-
-  it('triggers error boundary fallback UI after error', async () => {
-    render(
-      <ErrorBoundary fallback={<p role="alert">Something went wrong</p>}>
-        <ErrorButton />
-      </ErrorBoundary>,
-    )
-    const button = screen.getByText('Make an error')
-    await userEvent.click(button)
-    expect(screen.getByRole('alert')).toHaveTextContent('Something went wrong')
   })
 })

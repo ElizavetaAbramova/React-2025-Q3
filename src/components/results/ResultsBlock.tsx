@@ -1,39 +1,34 @@
-import { Component } from 'react'
 import Card from './Card'
+import type { Status } from '../../types&interfaces/Status'
+import { type Item } from '../../types&interfaces/Item'
 
-interface Item {
-  id: number
-  title: string
-  description: string
-}
 interface Props {
   searchResult?: Item[]
   searchQuery?: string | null
-  status?: 'error' | 'loading' | 'fulfilled' | 'empty'
+  status?: Status
+  onItemClick: (id: number) => void
 }
 
-class ResultsBlock extends Component<Props> {
-  renderContent() {
-    if (this.props.status === 'error') {
+export default function ResultsBlock(props: Props) {
+  const renderContent = () => {
+    if (props.status === 'error') {
       return <p>Error: could not get response from server</p>
     }
 
-    if (this.props.status === 'loading') {
+    if (props.status === 'loading') {
       return <p>Loading...</p>
     }
 
-    if (this.props.searchResult && this.props.status) {
-      if (this.props.searchResult.length === 0 && this.props.searchQuery !== null) {
+    if (props.searchResult && props.status) {
+      if (props.searchResult.length === 0 && props.searchQuery !== null) {
         return <p>No results</p>
       }
 
-      return this.props.searchResult.map((item: Item) => <Card key={item.id} data={item} />)
+      return props.searchResult.map((item: Item) => (
+        <Card key={item.id} data={item} onClick={() => props.onItemClick(item.id)} />
+      ))
     }
   }
 
-  render() {
-    return <div className="results-block">{this.renderContent()}</div>
-  }
+  return <div className="results-block">{renderContent()}</div>
 }
-
-export default ResultsBlock

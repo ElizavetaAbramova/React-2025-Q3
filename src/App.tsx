@@ -1,14 +1,17 @@
 import './App.css'
-import ErrorBoundary from './components/errorBoundary/ErrorBoundary'
-import MainPage from './pages/MainPage'
+import Navbar from './components/navigation/NavBar'
+import { Outlet } from 'react-router'
 
 function App() {
   return (
-    <>
-      <ErrorBoundary fallback={<p>Unexpected error</p>}>
-        <MainPage></MainPage>
-      </ErrorBoundary>
-    </>
+    <div className="app">
+      <header>
+        <Navbar></Navbar>
+      </header>
+      <main>
+        <Outlet></Outlet>
+      </main>
+    </div>
   )
 }
 

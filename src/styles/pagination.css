@@ -1,0 +1,20 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  padding-bottom: 10px;
+}
+
+.pagination-button-active {
+  background-color: rgb(108, 121, 131);
+}
+
+.pagination-hidden {
+  border-radius: 8px;
+  border: 2px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+}

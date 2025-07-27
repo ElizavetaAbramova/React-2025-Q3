@@ -1,0 +1,65 @@
+.about-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.about-text {
+  width: 50%;
+  font-size: 20px;
+}
+
+.links {
+  width: 50%;
+}
+.GitHub-link,
+.course-link {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.GitHub-link:hover .tooltip,
+.course-link:hover .tooltip {
+  visibility: visible;
+}
+
+.react-logo,
+.github-logo {
+  margin: 15px;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.react-logo:hover,
+.github-logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .react-logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
