@@ -1,7 +1,7 @@
 import '../styles/search.css'
 import '../styles/results-block.css'
 import '../styles/main-page.css'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import SearchBar from '../components/search/SearchBar'
 import ResultsBlock from '../components/results/ResultsBlock'
 import ErrorBoundary from '../components/errorBoundary/ErrorBoundary'
@@ -21,18 +21,6 @@ export default function MainPage() {
   const [pages, setPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const skip = 10
-
-  useEffect(() => {
-    //   const initialQuery = searchParams.get('search')
-    //   if (initialQuery && !searchQuery) {
-    //     if (searchParams.get('productId') && !productId) {
-    //       const id = Number(searchParams.get('productId'))
-    //       setProductId(id)
-    //       handleOpenDetails(id)
-    //     }
-    //     handleSearch(initialQuery)
-    //   }
-  })
 
   const handleOpenDetails = (id: number) => {
     setDetailsStatus(true)
@@ -70,7 +58,7 @@ export default function MainPage() {
     setSearchParams({ search: query })
     setSearchQuery(query)
     try {
-      const result = await getItems(query, skip)
+      const result = await getItems(query, skip || 10)
       setPages(Math.ceil(result.total / 10))
       setSearchResult(result.list)
       setStatus('fulfilled')
