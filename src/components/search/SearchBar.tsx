@@ -17,8 +17,8 @@ export default function SearchBar(props: SearchBarProps) {
 
   const handleSearchClick = () => {
     if (input.length !== 0) {
-      props.onSearch(input)
-      setSearchHistory(input)
+      props.onSearch(input.trim())
+      setSearchHistory(input.trim())
     } else {
       props.onSearch('')
     }
@@ -34,7 +34,7 @@ export default function SearchBar(props: SearchBarProps) {
         value={input}
       ></input>
 
-      <button className="search-button" name="Search" onMouseDown={handleSearchClick}>
+      <button className="search-button" name="Search" onClick={handleSearchClick}>
         Search
       </button>
     </div>

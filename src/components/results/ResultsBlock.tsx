@@ -1,15 +1,12 @@
 import Card from './Card'
-import type { Status } from '../../types/Status'
+import type { Status } from '../../types&interfaces/Status'
+import { type Item } from '../../types&interfaces/Item'
 
-interface Item {
-  id: number
-  title: string
-  description: string
-}
 interface Props {
   searchResult?: Item[]
   searchQuery?: string | null
   status?: Status
+  onItemClick: (id: number) => void
 }
 
 export default function ResultsBlock(props: Props) {
@@ -27,7 +24,9 @@ export default function ResultsBlock(props: Props) {
         return <p>No results</p>
       }
 
-      return props.searchResult.map((item: Item) => <Card key={item.id} data={item} />)
+      return props.searchResult.map((item: Item) => (
+        <Card key={item.id} data={item} onClick={() => props.onItemClick(item.id)} />
+      ))
     }
   }
 
