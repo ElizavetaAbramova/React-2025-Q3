@@ -3,6 +3,7 @@ import App from '../App'
 import MainPage from '../pages/MainPage'
 import AboutPage from '../pages/AboutPage'
 import Page404 from '../pages/Page404'
+import Details from '../components/details/Details'
 
 export const router = createBrowserRouter([
   {
@@ -11,8 +12,9 @@ export const router = createBrowserRouter([
     errorElement: <Page404 />,
     children: [
       {
-        index: true,
+        path: '/',
         element: <MainPage />,
+        children: [{ path: 'productId/:productId', element: <Details /> }],
       },
       {
         path: 'about',
