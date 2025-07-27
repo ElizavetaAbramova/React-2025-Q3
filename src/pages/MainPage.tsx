@@ -29,7 +29,6 @@ export default function MainPage() {
   }
 
   const handleCloseDetails = () => {
-    console.log('close')
     setDetailsStatus(false)
     setProductId(null)
     navigate('/')
