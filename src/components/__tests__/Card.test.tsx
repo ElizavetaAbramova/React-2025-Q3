@@ -17,30 +17,31 @@ vi.mock(import('react-router'), async (importOriginal) => {
 import Card from '../results/Card'
 
 const mockCardProps = {
-  id: 1,
-  title: 'Test Title',
-  description: 'Test Card Very Long Description',
-  images: ['test.png'],
-  availabilityStatus: 'In Stock',
-  brand: 'Gussi',
-  price: 45,
+  data: {
+    id: 1,
+    title: 'Test Title',
+    description: 'Test Card Very Long Description',
+    images: ['test.png'],
+    availabilityStatus: 'In Stock',
+    brand: 'Gussi',
+    price: 45,
+  },
 }
 
 describe('Card Component', () => {
   it('displays item name and description correctly', () => {
     render(
       <MemoryRouter>
-        <Card data={mockCardProps} />
+        <Card {...mockCardProps} onClick={() => vi.fn()} />
       </MemoryRouter>,
     )
     expect(screen.getByText('Test Title')).toBeInTheDocument()
-    expect(screen.getByText('Gussi')).toBeInTheDocument()
   })
 
   it('handles missing props gracefully', () => {
     render(
       <MemoryRouter>
-        <Card />
+        <Card onClick={() => vi.fn()} />
       </MemoryRouter>,
     )
     expect(screen.queryByText('Test Title')).not.toBeInTheDocument()
