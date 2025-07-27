@@ -30,16 +30,21 @@ describe('Function getItemById', () => {
   it('return correct data if response valid', async () => {
     window.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ products: [], total: 2, skip: 0 }),
+      json: async () => ({
+        id: 2,
+        title: 'mascara',
+        description: 'very long description',
+        brand: 'Prada',
+        price: '1.99',
+      }),
     })
 
-    const result = await getItemById('')
+    const result = await getItemById('2')
 
-    expect(fetch).toHaveBeenCalledWith('https://dummyjson.com/products/search?limit=10&skip=0')
-    console.log(result)
-    // expect(result.total).toEqual(2)
-    // expect(result.currentPage).toEqual(1)
-    // expect(result.list).toEqual([])
+    expect(fetch).toHaveBeenCalledWith('https://dummyjson.com/products/2')
+    expect(result.id).toEqual(2)
+    expect(result.title).toEqual('mascara')
+    expect(result.price).toEqual('1.99')
   })
   it('return error if response in not valid', async () => {
     window.fetch = vi.fn().mockResolvedValueOnce({
@@ -47,6 +52,6 @@ describe('Function getItemById', () => {
       status: 501,
     })
 
-    expect(getItems('fail')).rejects.toThrow('Failed to load data. Error code: 501')
+    expect(getItemById('fail')).rejects.toThrow('Failed to load data. Error code: 501')
   })
 })
