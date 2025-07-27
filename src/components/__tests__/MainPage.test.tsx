@@ -55,13 +55,13 @@ describe('MainPage', () => {
     const button = screen.getByRole('button', { name: 'Search' })
     await userEvent.click(button)
     await waitFor(() => {
-      expect(mockedGetItems).toBeCalledWith('', 10)
+      expect(mockedGetItems).toBeCalledWith('', 0)
     })
 
     await userEvent.type(input, 'apple')
     await userEvent.click(button)
     await waitFor(() => {
-      expect(mockedGetItems).toBeCalledWith('apple', 10)
+      expect(mockedGetItems).toBeCalledWith('apple', 0)
     })
   })
 

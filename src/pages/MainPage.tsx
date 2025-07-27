@@ -57,7 +57,8 @@ export default function MainPage() {
     setSearchParams({ search: query })
     setSearchQuery(query)
     try {
-      const result = await getItems(query, skip || 10)
+      const result = await getItems(query, skip || 0)
+
       setPages(Math.ceil(result.total / 10))
       setSearchResult(result.list)
       setStatus('fulfilled')
