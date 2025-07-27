@@ -6,10 +6,10 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <button className="nav-button" onClick={() => navigate('/')}>
+      <button className="nav-button" name="Main" onClick={() => navigate('/')}>
         Main
       </button>
-      <button className="back-button" onClick={() => navigate('/about')}>
+      <button className="back-button" name="About" onClick={() => navigate('/about')}>
         About
       </button>
     </nav>
