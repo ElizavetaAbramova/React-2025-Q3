@@ -1,7 +1,7 @@
 import '../styles/search.css'
 import '../styles/results-block.css'
 import '../styles/main-page.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBar from '../components/search/SearchBar'
 import ResultsBlock from '../components/results/ResultsBlock'
 import ErrorBoundary from '../components/errorBoundary/ErrorBoundary'
@@ -21,11 +21,21 @@ export default function MainPage() {
   const [pages, setPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const skip = 10
+  useEffect(() => {
+    const page = searchParams.get('page')
+    const search = searchParams.get('search')
+
+    if (search && page) {
+      setStatus('loading')
+      handleSearch(search, Number(page), (Number(page) - 1) * skip)
+    }
+  }, [searchParams, skip])
 
   const handleOpenDetails = (id: number) => {
     setDetailsStatus(true)
     setProductId(id)
-    navigate(`productId/${id}`)
+    const queryString = searchParams.toString()
+    navigate(`productId/${id}?${queryString}`)
   }
 
   const handleCloseDetails = () => {
@@ -36,29 +46,34 @@ export default function MainPage() {
   }
 
   const handlePagination = (page: number) => {
+    const params = new URLSearchParams(searchParams)
     const q = searchParams.get('search') || ''
+    const shift = (page - 1) * skip
+    params.set('page', page.toString())
     setCurrentPage(page)
     setDetailsStatus(false)
-    handleSearch(q, (page - 1) * skip)
-    setSearchParams({ search: q, page: page.toString() })
+    setSearchParams(params)
+    handleSearch(q, page, shift)
   }
 
-  const handleSearch = async (query: string, skip?: number) => {
+  const handleSearch = async (query: string, page: number, shift = 0) => {
     if (isDetailsOpen) {
       setDetailsStatus(false)
       navigate('/')
       setSearchParams({ search: searchQuery || '', page: currentPage.toString() })
     }
-    if (query !== searchQuery) {
-      setCurrentPage(1)
-    }
 
     setStatus('loading')
-    setSearchParams({ search: query })
     setSearchQuery(query)
-    try {
-      const result = await getItems(query, skip || 0)
+    setCurrentPage(page)
 
+    const params = new URLSearchParams(searchParams)
+    params.set('search', query)
+    params.set('page', page.toString())
+    setSearchParams(params)
+
+    try {
+      const result = await getItems(query, shift)
       setPages(Math.ceil(result.total / 10))
       setSearchResult(result.list)
       setStatus('fulfilled')
