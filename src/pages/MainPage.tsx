@@ -21,13 +21,31 @@ export default function MainPage() {
   const [pages, setPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const skip = 10
+
   useEffect(() => {
     const page = searchParams.get('page')
     const search = searchParams.get('search')
 
-    if (search && page) {
+    if (search) {
+      const shift = (Number(page) - 1) * skip
+
       setStatus('loading')
-      handleSearch(search, Number(page), (Number(page) - 1) * skip)
+      setSearchQuery(search)
+      setCurrentPage(Number(page))
+
+      getItems(search, shift)
+        .then((result) => {
+          setPages(Math.ceil(result.total / skip))
+          setSearchResult(result.list)
+          setStatus('fulfilled')
+        })
+        .catch(() => {
+          setStatus('error')
+        })
+    } else {
+      setStatus('empty')
+      setSearchResult([])
+      setSearchQuery(null)
     }
   }, [searchParams, skip])
 
@@ -48,38 +66,24 @@ export default function MainPage() {
   const handlePagination = (page: number) => {
     const params = new URLSearchParams(searchParams)
     const q = searchParams.get('search') || ''
-    const shift = (page - 1) * skip
     params.set('page', page.toString())
-    setCurrentPage(page)
-    setDetailsStatus(false)
-    setSearchParams(params)
-    handleSearch(q, page, shift)
-  }
-
-  const handleSearch = async (query: string, page: number, shift = 0) => {
     if (isDetailsOpen) {
-      setDetailsStatus(false)
-      navigate('/')
-      setSearchParams({ search: searchQuery || '', page: currentPage.toString() })
+      handleCloseDetails()
     }
 
-    setStatus('loading')
-    setSearchQuery(query)
     setCurrentPage(page)
+    handleSearch(q, page)
+  }
+
+  const handleSearch = (query: string, page: number) => {
+    if (isDetailsOpen) {
+      handleCloseDetails()
+    }
 
     const params = new URLSearchParams(searchParams)
     params.set('search', query)
     params.set('page', page.toString())
     setSearchParams(params)
-
-    try {
-      const result = await getItems(query, shift)
-      setPages(Math.ceil(result.total / 10))
-      setSearchResult(result.list)
-      setStatus('fulfilled')
-    } catch {
-      setStatus('error')
-    }
   }
 
   return (
@@ -94,7 +98,7 @@ export default function MainPage() {
             status={status}
             onItemClick={handleOpenDetails}
           ></ResultsBlock>
-          {pages > 0 && (
+          {pages > 0 && searchResult.length > 1 && (
             <Pagination pages={pages} onChangePage={handlePagination} activePage={currentPage} />
           )}
         </div>
