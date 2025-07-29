@@ -10,16 +10,19 @@ interface CardProps {
     price: number
   }
   onClick: () => void
+  active?: boolean
 }
 
 export default function Card(props: CardProps) {
   const { data } = props
+  const className = props.active ? 'result-card active' : 'result-card'
   if (!data) return <p>Something went wrong</p>
 
   return (
     <div
-      className="result-card"
+      className={className}
       onClick={() => {
+        //if event target is checkbox => props.onCheck
         props.onClick()
       }}
     >
@@ -30,6 +33,7 @@ export default function Card(props: CardProps) {
         height={100}
       />
       <div>{data.title}</div>
+      {/* <checkbox></checkbox> */}
     </div>
   )
 }

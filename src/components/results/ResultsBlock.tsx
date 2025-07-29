@@ -7,6 +7,7 @@ interface Props {
   searchQuery?: string | null
   status?: Status
   onItemClick: (id: number) => void
+  currentItem: number
 }
 
 export default function ResultsBlock(props: Props) {
@@ -24,9 +25,18 @@ export default function ResultsBlock(props: Props) {
         return <p>No results</p>
       }
 
-      return props.searchResult.map((item: Item) => (
-        <Card key={item.id} data={item} onClick={() => props.onItemClick(item.id)} />
-      ))
+      return props.searchResult.map((item: Item) =>
+        item.id === props.currentItem ? (
+          <Card
+            key={item.id}
+            data={item}
+            onClick={() => props.onItemClick(item.id)}
+            active={true}
+          />
+        ) : (
+          <Card key={item.id} data={item} onClick={() => props.onItemClick(item.id)} />
+        ),
+      )
     }
   }
 

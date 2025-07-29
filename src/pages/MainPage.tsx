@@ -97,6 +97,7 @@ export default function MainPage() {
             searchQuery={searchQuery}
             status={status}
             onItemClick={handleOpenDetails}
+            currentItem={productId || 0}
           ></ResultsBlock>
           {pages > 0 && searchResult.length > 1 && (
             <Pagination pages={pages} onChangePage={handlePagination} activePage={currentPage} />
