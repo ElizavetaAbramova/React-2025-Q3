@@ -3,19 +3,36 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 import getItems from '../../api/getItems'
+import { MemoryRouter /*, useNavigate, useSearchParams */ } from 'react-router'
 
 vi.mock('../../api/getItems', () => ({
   default: vi.fn(),
 }))
+
+// vi.mock('react-router', async () => {
+//   const actual = await vi.importActual('react-router')
+//   return {
+//     ...actual,
+//     useNavigate: vi.fn(),
+//     useSearchParams: () => [
+//       new URLSearchParams({ search: 'test', page: '1' }),
+//       mockSetSearchParams,
+//     ],
+//   }
+// })
+
 const mockedGetItems = vi.mocked(getItems)
+// const mockSetSearchParams = vi.fn()
+// const mockNavigate = vi.mocked(useNavigate)
+// const mockSearchParams = vi.mocked(useSearchParams)
 
 import MainPage from '../../pages/MainPage'
-import { MemoryRouter } from 'react-router'
 
 describe('MainPage', () => {
   beforeEach(() => {
     localStorage.clear()
-    mockedGetItems.mockReset()
+    // mockedGetItems.mockReset()
+    vi.clearAllMocks()
   })
 
   it('handles search term from localStorage on initial load', () => {
@@ -126,4 +143,31 @@ describe('MainPage', () => {
     await userEvent.click(button)
     expect(screen.getByText('No results')).toBeInTheDocument()
   })
+
+  it('open details with provided productId', async () => {
+    mockedGetItems.mockResolvedValueOnce({
+      list: [
+        { id: 1, title: 'Test 1', images: 'test.png', description: 'test test' },
+        { id: 2, title: 'Test 2', images: 'test.png', description: 'product product' },
+      ],
+      total: 2,
+      currentPage: 1,
+    })
+
+    render(
+      <MemoryRouter>
+        <MainPage />
+      </MemoryRouter>,
+    )
+    const button = screen.getByRole('button', { name: 'Search' })
+    await userEvent.click(button)
+    const productCard = await screen.findByText('Test 1')
+    await userEvent.click(productCard)
+    // const productCard = await screen.findByText('Test 1')
+    expect(await screen.findByText('test test')).toBeInTheDocument()
+  })
+
+  it('close details when close button clicked', () => {})
+
+  it('change page when pagination button clicked', () => {})
 })

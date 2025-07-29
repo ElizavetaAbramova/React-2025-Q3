@@ -70,6 +70,7 @@ describe('SearchBar', () => {
 
   it('triggers search callback with correct parameters', async () => {
     render(<SearchBar onSearch={mockOnSearch} />)
+    const page = 1
     const input: HTMLInputElement = screen.getByPlaceholderText('ex.: apple')
     const button = screen.getByRole('button')
 
@@ -77,7 +78,7 @@ describe('SearchBar', () => {
     await userEvent.click(button)
 
     expect(mockOnSearch).toHaveBeenCalledTimes(1)
-    expect(mockOnSearch).toHaveBeenCalledWith('peach')
+    expect(mockOnSearch).toHaveBeenCalledWith('peach', page)
   })
 
   it('retrieves saved search term on component mount', () => {
