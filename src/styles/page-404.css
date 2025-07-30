@@ -3,10 +3,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: auto;
+  height: 100%;
 }
 
 .back-button {
-  color: aliceblue;
+  background-color: #646cffaa;
+  color: var(--text-color);
 }
 
 .image-404 {

@@ -1,0 +1,5 @@
+.theme-switcher {
+  background-color: var(--button-bg);
+  color: var(--text-color);
+  transition: all 1s;
+}
