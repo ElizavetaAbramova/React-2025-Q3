@@ -15,3 +15,8 @@
 .active {
   background-color: var(--active);
 }
+
+.card-checkbox {
+  width: 15px;
+  height: 15px;
+}

@@ -5,7 +5,7 @@ import getItemById from '../../api/getItemById'
 import { useOutletContext } from 'react-router'
 
 interface Props {
-  productId: number | null
+  productId: number
   handleCloseDetails: () => void
 }
 
@@ -16,7 +16,7 @@ export default function Details() {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    if (!productId) {
+    if (productId === 0) {
       setError(true)
     } else {
       setLoading(true)

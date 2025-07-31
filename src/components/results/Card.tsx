@@ -1,6 +1,9 @@
+import type { SyntheticEvent } from 'react'
 import '../../styles/card.css'
+import { useDispatch } from 'react-redux'
+import { addItem, deleteItem } from '../../features/shoppingList/shoppingListSlice'
 interface CardProps {
-  data?: {
+  data: {
     id: number
     title: string
     description: string
@@ -10,22 +13,37 @@ interface CardProps {
     price: number
   }
   onClick: () => void
-  active?: boolean
+  active: boolean
+  checked: boolean
 }
 
 export default function Card(props: CardProps) {
+  const dispatch = useDispatch()
   const { data } = props
+
   const className = props.active ? 'result-card active' : 'result-card'
   if (!data) return <p>Something went wrong</p>
 
+  const handleClick = (event: SyntheticEvent) => {
+    const target = event.target as HTMLElement
+
+    if (target.tagName !== 'INPUT') {
+      props.onClick()
+    }
+  }
+
+  const handleChange = (event: SyntheticEvent) => {
+    event.stopPropagation()
+
+    if (!props.checked) {
+      dispatch(addItem(data))
+    } else {
+      dispatch(deleteItem(data))
+    }
+  }
+
   return (
-    <div
-      className={className}
-      onClick={() => {
-        //if event target is checkbox => props.onCheck
-        props.onClick()
-      }}
-    >
+    <div className={className} onClick={handleClick}>
       <img
         src={data.images[0] || 'assets/image-placeholder.png'}
         alt="product-image"
@@ -33,7 +51,12 @@ export default function Card(props: CardProps) {
         height={100}
       />
       <div>{data.title}</div>
-      {/* <checkbox></checkbox> */}
+      <input
+        className="card-checkbox"
+        type="checkbox"
+        onChange={handleChange}
+        checked={props.checked}
+      ></input>
     </div>
   )
 }
