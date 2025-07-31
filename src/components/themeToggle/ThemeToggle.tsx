@@ -1,6 +1,6 @@
 import '../../styles/theme-switcher.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { setTheme } from '../../features/theme/themeSlicer'
+import { setTheme } from '../../features/theme/themeSlice'
 import type { RootState } from '../../store/store'
 
 export default function ThemeSwitcher() {
