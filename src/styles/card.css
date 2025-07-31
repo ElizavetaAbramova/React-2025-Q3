@@ -10,6 +10,7 @@
   align-items: center;
   width: 150px;
   max-height: 200px;
+  gap: 2px;
 }
 
 .active {
@@ -19,4 +20,11 @@
 .card-checkbox {
   width: 15px;
   height: 15px;
+  margin: auto;
+}
+
+.checkbox-label {
+  display: flex;
+  gap: 5px;
+  align-content: center;
 }

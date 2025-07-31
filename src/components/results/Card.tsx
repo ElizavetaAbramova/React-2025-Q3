@@ -27,7 +27,7 @@ export default function Card(props: CardProps) {
   const handleClick = (event: SyntheticEvent) => {
     const target = event.target as HTMLElement
 
-    if (target.tagName !== 'INPUT') {
+    if (target.tagName !== 'INPUT' && target.tagName !== 'LABEL') {
       props.onClick()
     }
   }
@@ -51,12 +51,15 @@ export default function Card(props: CardProps) {
         height={100}
       />
       <div>{data.title}</div>
-      <input
-        className="card-checkbox"
-        type="checkbox"
-        onChange={handleChange}
-        checked={props.checked}
-      ></input>
+      <label className="checkbox-label">
+        <input
+          className="card-checkbox"
+          type="checkbox"
+          onChange={handleChange}
+          checked={props.checked}
+        ></input>
+        Add to list
+      </label>
     </div>
   )
 }
