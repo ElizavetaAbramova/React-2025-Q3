@@ -41,7 +41,7 @@ export default function MainPage() {
     setProductId(0)
     navigate('/')
     const search = searchParams.get('search')
-    if (search) {
+    if (search || search === '') {
       setSearchParams({ search: searchQuery || '', page: currentPage.toString() })
     }
   }
@@ -106,7 +106,7 @@ export default function MainPage() {
   )
 
   return (
-    <div className="main-page">
+    <div className="main-page" data-testid={'main'}>
       <ErrorBoundary fallback={<p>Something went wrong, try to reload page</p>}>
         <div className="search-block">
           <h2 className="main-text">What are you looking for?</h2>
