@@ -16,9 +16,7 @@ export default function Details() {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    if (productId === 0) {
-      setError(true)
-    } else {
+    if (productId && productId !== 0) {
       setLoading(true)
       setError(false)
       getItemById(productId.toString())
@@ -27,6 +25,8 @@ export default function Details() {
         .finally(() => {
           setLoading(false)
         })
+    } else {
+      setError(true)
     }
   }, [productId])
 
