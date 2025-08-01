@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type Item } from '../../types&interfaces/Item'
 
-interface ShoppingListState {
+export interface ShoppingListState {
   list: Item[]
 }
 

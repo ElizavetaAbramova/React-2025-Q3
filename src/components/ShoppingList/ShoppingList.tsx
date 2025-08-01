@@ -37,13 +37,17 @@ export default function ShoppingList(props: Props) {
       document.body.appendChild(element)
       element.click()
     }
-    console.log(props.list)
   }
+
   return (
     <div className="shopping-list-control-block">
       <p>Selected {props.list.length} item(s)</p>
-      <button onClick={downloadList}>Download shopping list</button>
-      <button onClick={() => dispatch(clearList())}>Clear list</button>
+      <button onClick={downloadList} name="download">
+        Download shopping list
+      </button>
+      <button onClick={() => dispatch(clearList())} name="clear">
+        Clear list
+      </button>
     </div>
   )
 }
