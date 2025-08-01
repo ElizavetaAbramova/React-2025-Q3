@@ -2,20 +2,7 @@ import type { SyntheticEvent } from 'react'
 import '../../styles/card.css'
 import { useDispatch } from 'react-redux'
 import { addItem, deleteItem } from '../../features/shoppingList/shoppingListSlice'
-interface CardProps {
-  data: {
-    id: number
-    title: string
-    description: string
-    images: string[]
-    availabilityStatus: string
-    brand: string
-    price: number
-  }
-  onClick: () => void
-  active: boolean
-  checked: boolean
-}
+import type { CardProps } from '../../types&interfaces/CardProps'
 
 export default function Card(props: CardProps) {
   const dispatch = useDispatch()
@@ -43,7 +30,7 @@ export default function Card(props: CardProps) {
   }
 
   return (
-    <div className={className} onClick={handleClick}>
+    <div className={className} onClick={handleClick} data-testid={'card'}>
       <img
         src={data.images[0] || 'assets/image-placeholder.png'}
         alt="product-image"
