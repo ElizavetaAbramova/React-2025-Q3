@@ -7,7 +7,7 @@ interface Props {
 }
 
 const ThemeProvider: React.FC<Props> = ({ children }) => {
-  const theme = useSelector((state: RootState) => state.theme.theme)
+  const theme = useSelector((state: RootState) => state.theme.mode)
 
   useEffect(() => {
     document.body.classList.remove('light', 'dark')
