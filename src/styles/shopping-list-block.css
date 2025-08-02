@@ -1,0 +1,8 @@
+.shopping-list-control-block {
+  display: flex;
+  gap: 10px;
+  height: 45px;
+  align-items: center;
+  width: 40%;
+  min-width: 330px;
+}

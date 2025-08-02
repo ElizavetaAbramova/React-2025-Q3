@@ -1,4 +1,4 @@
-export default async function getItems(param: string, skip = 0) {
+export default async function getItems(param: string, skip: number) {
   const limit = 10
   const query = encodeURIComponent(param)
   const url =

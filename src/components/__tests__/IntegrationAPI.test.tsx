@@ -9,7 +9,7 @@ describe('Function getItems', () => {
       json: async () => ({ products: [], total: 2, skip: 0 }),
     })
 
-    const result = await getItems('')
+    const result = await getItems('', 0)
 
     expect(fetch).toHaveBeenCalledWith('https://dummyjson.com/products/search?limit=10&skip=0')
     expect(result.total).toEqual(2)
@@ -22,7 +22,7 @@ describe('Function getItems', () => {
       status: 501,
     })
 
-    expect(getItems('fail')).rejects.toThrow('Failed to load data. Error code: 501')
+    expect(getItems('fail', 0)).rejects.toThrow('Failed to load data. Error code: 501')
   })
 })
 

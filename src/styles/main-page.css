@@ -3,3 +3,16 @@
   justify-content: center;
   gap: 20px;
 }
+.buttons-block {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+@media (max-width: 1200px) {
+  .buttons-block {
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 120px;
+  }
+}

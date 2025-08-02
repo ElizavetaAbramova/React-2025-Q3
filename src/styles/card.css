@@ -4,10 +4,27 @@
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #2e2e2e;
+  background-color: var(--button-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 150px;
   max-height: 200px;
+  gap: 2px;
+}
+
+.active {
+  background-color: var(--active);
+}
+
+.card-checkbox {
+  width: 15px;
+  height: 15px;
+  margin: auto;
+}
+
+.checkbox-label {
+  display: flex;
+  gap: 5px;
+  align-content: center;
 }

@@ -1,51 +1,107 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import '@testing-library/jest-dom'
-import { MemoryRouter } from 'react-router'
-const mockNavigate = vi.fn()
+import shoppingListReducer from '../../features/shoppingList/shoppingListSlice'
+import { configureStore } from '@reduxjs/toolkit'
+import type { CardProps } from '../../types&interfaces/CardProps'
+import { Provider } from 'react-redux'
+import Card from '../results/Card'
+import userEvent from '@testing-library/user-event'
 
-vi.mock(import('react-router'), async (importOriginal) => {
-  const actual = await importOriginal()
-  return {
-    ...actual,
-    default: () => ({
-      navigate: mockNavigate,
-    }),
-  }
+const storeMock = configureStore({
+  reducer: {
+    shoppingList: shoppingListReducer,
+  },
 })
 
-import Card from '../results/Card'
-
-const mockCardProps = {
-  data: {
-    id: 1,
-    title: 'Test Title',
-    description: 'Test Card Very Long Description',
-    images: ['test.png'],
-    availabilityStatus: 'In Stock',
-    brand: 'Gussi',
-    price: 45,
-  },
-}
-
 describe('Card Component', () => {
-  it('displays item name and description correctly', () => {
+  it('displays card component and item name', () => {
+    const mockCardProps: CardProps = {
+      data: {
+        id: 1,
+        title: 'Test Title',
+        description: 'Test Card Very Long Description',
+        images: ['test.png'],
+        availabilityStatus: 'In Stock',
+        brand: 'Gussi',
+        price: 45,
+      },
+      onClick: vi.fn(),
+      active: false,
+      checked: false,
+    }
     render(
-      <MemoryRouter>
-        <Card {...mockCardProps} onClick={() => vi.fn()} />
-      </MemoryRouter>,
+      <Provider store={storeMock}>
+        <Card {...mockCardProps}></Card>
+      </Provider>,
     )
     expect(screen.getByText('Test Title')).toBeInTheDocument()
+    expect(screen.getByTestId('card')).toBeInTheDocument()
   })
 
-  it('handles missing props gracefully', () => {
+  it('handles missing props', () => {
     render(
-      <MemoryRouter>
-        <Card onClick={() => vi.fn()} />
-      </MemoryRouter>,
+      <Provider store={storeMock}>
+        <Card {...({} as CardProps)}></Card>
+      </Provider>,
     )
     expect(screen.queryByText('Test Title')).not.toBeInTheDocument()
     expect(screen.queryByText('Test Card Very Long Description')).not.toBeInTheDocument()
     expect(screen.getByText('Something went wrong')).toBeInTheDocument()
+  })
+
+  it('open details when user clicked on Card', async () => {
+    const mockCardProps: CardProps = {
+      data: {
+        id: 1,
+        title: 'Test Title',
+        description: 'Test Card Very Long Description',
+        images: ['test.png'],
+        availabilityStatus: 'In Stock',
+        brand: 'Gussi',
+        price: 45,
+      },
+      onClick: vi.fn(),
+      active: false,
+      checked: false,
+    }
+    render(
+      <Provider store={storeMock}>
+        <Card {...mockCardProps}></Card>
+      </Provider>,
+    )
+    const card = screen.getByTestId('card')
+    await userEvent.click(card)
+    expect(mockCardProps.onClick).toBeCalled()
+  })
+
+  it('add item to list when user clicked on checkbox', async () => {
+    const mockCardProps: CardProps = {
+      data: {
+        id: 1,
+        title: 'Test Title',
+        description: 'Test Card Very Long Description',
+        images: ['test.png'],
+        availabilityStatus: 'In Stock',
+        brand: 'Gussi',
+        price: 45,
+      },
+      onClick: vi.fn(),
+      active: false,
+      checked: false,
+    }
+    render(
+      <Provider store={storeMock}>
+        <Card {...mockCardProps}></Card>
+      </Provider>,
+    )
+
+    const checkbox = screen.getByRole('checkbox')
+    expect(checkbox).toBeInTheDocument()
+    await userEvent.click(checkbox)
+
+    const state = storeMock.getState()
+    expect(state.shoppingList.list).toBeTruthy()
+    expect(state.shoppingList.list[0].id).toBe(mockCardProps.data.id)
   })
 })

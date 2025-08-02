@@ -6,7 +6,8 @@
 }
 
 .pagination-button-active {
-  background-color: rgb(108, 121, 131);
+  background-color: var(--active);
+  border-color: var(--primary-color);
 }
 
 .pagination-hidden {
@@ -16,5 +17,5 @@
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--button-bg);
 }

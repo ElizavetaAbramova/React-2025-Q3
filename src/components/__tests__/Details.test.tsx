@@ -79,6 +79,7 @@ describe('Details', () => {
       productId: null,
       handleCloseDetails,
     })
+
     render(
       <MemoryRouter>
         <Details />

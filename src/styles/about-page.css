@@ -11,6 +11,7 @@
 .links {
   width: 50%;
 }
+
 .GitHub-link,
 .course-link {
   position: relative;
@@ -20,8 +21,8 @@
 .tooltip {
   visibility: hidden;
   width: 120px;
-  background-color: black;
-  color: #fff;
+  background-color: var(--button-bg);
+  color: var(--text-color);
   text-align: center;
   padding: 5px 0;
   border-radius: 6px;
