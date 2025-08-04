@@ -12,47 +12,48 @@ const storeMock = configureStore({
     shoppingList: shoppingListReducer,
   },
 })
+const searchContextMock = {
+  searchResult: [
+    {
+      id: 1,
+      title: 'Item 1',
+      images: ['test.png'],
+      description: 'description string',
+      availabilityStatus: 'string',
+      brand: 'string',
+      price: 1,
+    },
+    {
+      id: 2,
+      title: 'Item 2',
+      images: ['test.png'],
+      description: 'description string',
+      availabilityStatus: 'string',
+      brand: 'string',
+      price: 1,
+    },
+  ],
+  productId: 2,
+  selectedItems: [
+    {
+      id: 1,
+      title: 'Item 1',
+      images: ['test.png'],
+      description: 'description string',
+      availabilityStatus: 'string',
+      brand: 'string',
+      price: 1,
+    },
+  ],
+  handleOpenDetails: vi.fn(),
+}
 
 describe('ResultsBlock', () => {
   it('renders correct number of items when data is provided', async () => {
-    const searchContextMock = {
-      searchResult: [
-        {
-          id: 1,
-          title: 'Item 1',
-          images: ['test.png'],
-          description: 'description string',
-          availabilityStatus: 'string',
-          brand: 'string',
-          price: 1,
-        },
-        {
-          id: 2,
-          title: 'Item 2',
-          images: ['test.png'],
-          description: 'description string',
-          availabilityStatus: 'string',
-          brand: 'string',
-          price: 1,
-        },
-      ],
-      productId: 2,
-      selectedItems: [
-        {
-          id: 1,
-          title: 'Item 1',
-          images: ['test.png'],
-          description: 'description string',
-          availabilityStatus: 'string',
-          brand: 'string',
-          price: 1,
-        },
-      ],
-    }
     render(
       <Provider store={storeMock}>
         <SearchResultContext.Provider value={searchContextMock}>
-          <SearchResultBlock onItemClick={() => vi.fn()} />
+          <SearchResultBlock />
         </SearchResultContext.Provider>
       </Provider>,
     )
@@ -63,44 +64,10 @@ describe('ResultsBlock', () => {
   })
 
   it('correctly displays item names', () => {
-    const searchContextMock = {
-      searchResult: [
-        {
-          id: 1,
-          title: 'Item 1',
-          images: ['test.png'],
-          description: 'description string',
-          availabilityStatus: 'string',
-          brand: 'string',
-          price: 1,
-        },
-        {
-          id: 2,
-          title: 'Item 2',
-          images: ['test.png'],
-          description: 'description string',
-          availabilityStatus: 'string',
-          brand: 'string',
-          price: 1,
-        },
-      ],
-      productId: 2,
-      selectedItems: [
-        {
-          id: 1,
-          title: 'Item 1',
-          images: ['test.png'],
-          description: 'description string',
-          availabilityStatus: 'string',
-          brand: 'string',
-          price: 1,
-        },
-      ],
-    }
     render(
       <Provider store={storeMock}>
         <SearchResultContext.Provider value={searchContextMock}>
-          <SearchResultBlock onItemClick={() => vi.fn()} />
+          <SearchResultBlock />
         </SearchResultContext.Provider>
       </Provider>,
     )
@@ -110,7 +77,7 @@ describe('ResultsBlock', () => {
   })
 
   it('handles missing or undefined data gracefully', () => {
-    render(<SearchResultBlock onItemClick={() => vi.fn()} />)
+    render(<SearchResultBlock />)
     expect(document.querySelector('.results-block')).not.toBeInTheDocument()
     expect(document.querySelectorAll('.result-card').length).toBe(0)
     expect(screen.getByText('Error: could not get response from server')).toBeInTheDocument()

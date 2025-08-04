@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 import getItems from '../../api/getItems'
 import { MemoryRouter } from 'react-router'
 import { configureStore } from '@reduxjs/toolkit'
-import shoppingListReducer from '../../features/selectedItemsList/selectedItemsListSlice'
+import selectedItemsListReducer from '../../features/selectedItemsList/selectedItemsListSlice'
 import { Provider } from 'react-redux'
 
 const mockNavigate = vi.fn()
@@ -28,7 +28,7 @@ import MainPage from '../../pages/MainPage'
 
 const storeMock = configureStore({
   reducer: {
-    shoppingList: shoppingListReducer,
+    selectedItemsList: selectedItemsListReducer,
   },
 })
 
