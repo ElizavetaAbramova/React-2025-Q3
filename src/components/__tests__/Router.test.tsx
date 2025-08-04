@@ -6,7 +6,7 @@ import App from '../../App'
 import Page404 from '../../pages/Page404'
 import MainPage from '../../pages/MainPage'
 import AboutPage from '../../pages/AboutPage'
-import Details from '../details/Details'
+import ProductDetails from '../productDetails/ProductDetails'
 import getItemById from '../../api/getItemById'
 
 describe('Router', () => {
@@ -108,7 +108,7 @@ describe('Router', () => {
           children: [
             {
               path: 'productId/:productId',
-              element: <Details />,
+              element: <ProductDetails />,
             },
           ],
         },
