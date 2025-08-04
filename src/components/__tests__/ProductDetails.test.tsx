@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import Details from '../details/Details'
+import ProductDetails from '../productDetails/ProductDetails'
 import { describe, expect, it, vi } from 'vitest'
 import getItemById from '../../api/getItemById'
 import { render, screen, waitFor } from '@testing-library/react'
@@ -30,7 +30,7 @@ describe('Details', () => {
     })
     render(
       <MemoryRouter>
-        <Details />
+        <ProductDetails />
       </MemoryRouter>,
     )
     expect(screen.getByText('Loading...')).toBeInTheDocument()
@@ -42,7 +42,7 @@ describe('Details', () => {
     })
     render(
       <MemoryRouter>
-        <Details />
+        <ProductDetails />
       </MemoryRouter>,
     )
     expect(screen.getByText('Ooops! Something went wrong.')).toBeInTheDocument()
@@ -63,7 +63,7 @@ describe('Details', () => {
     })
     render(
       <MemoryRouter>
-        <Details />
+        <ProductDetails />
       </MemoryRouter>,
     )
     expect(screen.queryByText('Ooops! Something went wrong.')).not.toBeInTheDocument()
@@ -82,7 +82,7 @@ describe('Details', () => {
 
     render(
       <MemoryRouter>
-        <Details />
+        <ProductDetails />
       </MemoryRouter>,
     )
     const button = screen.getByRole('button')

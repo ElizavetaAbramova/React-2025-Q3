@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import themeReducer from '../features/theme/themeSlice'
-import shoppingListReducer from '../features/shoppingList/shoppingListSlice'
+import selectedItemsListReducer from '../features/selectedItemsList/selectedItemsListSlice'
 
 export const store = configureStore({
   reducer: {
     theme: themeReducer,
-    shoppingList: shoppingListReducer,
+    selectedItemsList: selectedItemsListReducer,
   },
 })
 

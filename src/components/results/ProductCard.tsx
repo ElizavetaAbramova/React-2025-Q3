@@ -1,21 +1,23 @@
-import type { SyntheticEvent } from 'react'
+import { useContext, type SyntheticEvent } from 'react'
 import '../../styles/card.css'
 import { useDispatch } from 'react-redux'
-import { addItem, deleteItem } from '../../features/shoppingList/shoppingListSlice'
+import { addItem, deleteItem } from '../../features/selectedItemsList/selectedItemsListSlice'
 import type { CardProps } from '../../types&interfaces/CardProps'
+import { SearchResultContext } from './SearchResultContext'
 
-export default function Card(props: CardProps) {
+export default function ProductCard(props: CardProps) {
+  const context = useContext(SearchResultContext)
   const dispatch = useDispatch()
   const { data } = props
 
   const className = props.active ? 'result-card active' : 'result-card'
-  if (!data) return <p>Something went wrong</p>
+  if (!data || !context) return <p>Something went wrong</p>
 
   const handleClick = (event: SyntheticEvent) => {
     const target = event.target as HTMLElement
 
     if (target.tagName !== 'INPUT' && target.tagName !== 'LABEL') {
-      props.onClick()
+      context.handleOpenDetails(data.id)
     }
   }
 

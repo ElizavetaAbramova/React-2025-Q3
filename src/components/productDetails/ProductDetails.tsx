@@ -1,4 +1,4 @@
-import '../../styles/details.css'
+import '../../styles/product-details.css'
 import { type Item } from '../../types&interfaces/Item'
 import { useEffect, useState } from 'react'
 import getItemById from '../../api/getItemById'
@@ -9,7 +9,7 @@ interface Props {
   handleCloseDetails: () => void
 }
 
-export default function Details() {
+export default function ProductDetails() {
   const { productId, handleCloseDetails } = useOutletContext<Props>()
   const [product, setProduct] = useState<Item>()
   const [loading, setLoading] = useState(true)
@@ -35,7 +35,7 @@ export default function Details() {
       <button className="close-button" onClick={() => handleCloseDetails()}>
         X
       </button>
-      <div className="content">
+      <div className="details-content">
         {loading && <p>Loading...</p>}
         {error && <p>Ooops! Something went wrong.</p>}
         {!loading && product && (

@@ -8,7 +8,6 @@ export interface CardProps {
     brand: string
     price: number
   }
-  onClick: () => void
   active: boolean
   checked: boolean
 }

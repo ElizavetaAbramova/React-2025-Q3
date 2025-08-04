@@ -3,7 +3,7 @@ import App from '../App'
 import MainPage from '../pages/MainPage'
 import AboutPage from '../pages/AboutPage'
 import Page404 from '../pages/Page404'
-import Details from '../components/details/Details'
+import ProductDetails from '../components/productDetails/ProductDetails'
 
 export const router = createBrowserRouter([
   {
@@ -14,7 +14,7 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <MainPage />,
-        children: [{ path: 'productId/:productId', element: <Details /> }],
+        children: [{ path: 'productId/:productId', element: <ProductDetails /> }],
       },
       {
         path: 'about',
