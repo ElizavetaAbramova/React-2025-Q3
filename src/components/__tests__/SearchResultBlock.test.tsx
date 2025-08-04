@@ -5,7 +5,7 @@ import SearchResultBlock from '../results/SearchResultBlock'
 import { SearchResultContext } from '../results/SearchResultContext'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
-import shoppingListReducer from '../../features/shoppingList/shoppingListSlice'
+import shoppingListReducer from '../../features/selectedItemsList/selectedItemsListSlice'
 
 const storeMock = configureStore({
   reducer: {

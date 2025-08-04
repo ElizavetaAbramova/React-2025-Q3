@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import '@testing-library/jest-dom'
-import shoppingListReducer from '../../features/shoppingList/shoppingListSlice'
+import shoppingListReducer from '../../features/selectedItemsList/selectedItemsListSlice'
 import { configureStore } from '@reduxjs/toolkit'
 import type { CardProps } from '../../types&interfaces/CardProps'
 import { Provider } from 'react-redux'

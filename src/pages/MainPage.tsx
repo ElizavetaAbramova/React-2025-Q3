@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 import type { RootState } from '../store/store'
 import type { Item } from '../types&interfaces/Item'
 import { SearchResultContext } from '../components/results/SearchResultContext'
-import ShoppingList from '../components/ShoppingList/ShoppingList'
+import SelectedItemsFlyout from '../components/SelectedItemsFlyout/SelectedItemsFlyout'
 
 export default function MainPage() {
   const navigate = useNavigate()
@@ -25,7 +25,7 @@ export default function MainPage() {
   const [pages, setPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const location = useLocation()
-  const selectedItems = useSelector<RootState, Item[]>((state) => state.shoppingList.list)
+  const selectedItems = useSelector<RootState, Item[]>((state) => state.selectedItemsList.list)
   const skip = 10
 
   const handleOpenDetails = useCallback(
@@ -115,7 +115,9 @@ export default function MainPage() {
           <h2 className="main-text">What are you looking for?</h2>
           <div className="buttons-block">
             <SearchBar onSearch={handleSearch}></SearchBar>
-            {selectedItems.length !== 0 && <ShoppingList list={selectedItems}></ShoppingList>}
+            {selectedItems.length !== 0 && (
+              <SelectedItemsFlyout list={selectedItems}></SelectedItemsFlyout>
+            )}
           </div>
           <SearchResultContext.Provider value={contextValue}>
             {status === 'error' && <p>Error: could not get response from server</p>}

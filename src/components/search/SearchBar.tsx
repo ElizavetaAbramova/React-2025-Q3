@@ -34,7 +34,6 @@ export default function SearchBar(props: SearchBarProps) {
         onChange={(event) => setInput(event.target.value)}
         value={input}
       ></input>
-
       <button className="search-button" name="Search" onClick={handleSearchClick}>
         Search
       </button>

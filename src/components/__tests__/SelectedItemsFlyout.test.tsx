@@ -1,15 +1,15 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import ShoppingList from '../ShoppingList/ShoppingList'
+import SelectedItemsFlyout from '../SelectedItemsFlyout/SelectedItemsFlyout'
 import { configureStore } from '@reduxjs/toolkit'
 import shoppingListReducer, {
-  type ShoppingListState,
-} from '../../features/shoppingList/shoppingListSlice'
+  type SelectedItemsListState,
+} from '../../features/selectedItemsList/selectedItemsListSlice'
 import { Provider } from 'react-redux'
 import userEvent from '@testing-library/user-event'
 
-const preloadedState: { shoppingList: ShoppingListState } = {
+const preloadedState: { shoppingList: SelectedItemsListState } = {
   shoppingList: {
     list: [
       {
@@ -53,7 +53,7 @@ describe('ShoppingList block', () => {
 
     render(
       <Provider store={storeMock}>
-        <ShoppingList {...mockProps}></ShoppingList>
+        <SelectedItemsFlyout {...mockProps}></SelectedItemsFlyout>
       </Provider>,
     )
     expect(screen.getByText('Selected 1 item(s)')).toBeInTheDocument()
@@ -78,7 +78,7 @@ describe('ShoppingList block', () => {
 
     render(
       <Provider store={storeMock}>
-        <ShoppingList {...mockProps}></ShoppingList>
+        <SelectedItemsFlyout {...mockProps}></SelectedItemsFlyout>
       </Provider>,
     )
 
@@ -105,7 +105,7 @@ describe('ShoppingList block', () => {
 
     render(
       <Provider store={storeMock}>
-        <ShoppingList {...mockProps}></ShoppingList>
+        <SelectedItemsFlyout {...mockProps}></SelectedItemsFlyout>
       </Provider>,
     )
 

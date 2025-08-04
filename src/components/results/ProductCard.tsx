@@ -1,7 +1,7 @@
 import { useContext, type SyntheticEvent } from 'react'
 import '../../styles/card.css'
 import { useDispatch } from 'react-redux'
-import { addItem, deleteItem } from '../../features/shoppingList/shoppingListSlice'
+import { addItem, deleteItem } from '../../features/selectedItemsList/selectedItemsListSlice'
 import type { CardProps } from '../../types&interfaces/CardProps'
 import { SearchResultContext } from './SearchResultContext'
 
