@@ -8,7 +8,7 @@ import ErrorBoundary from '../components/errorBoundary/ErrorBoundary'
 import getItems from '../api/getItems'
 import type { Status } from '../types&interfaces/Status'
 import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router'
-import Pagination from '../components/pagination/Pagination'
+import PaginationButtons from '../components/pagination/PaginationButtons'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../store/store'
 import type { Item } from '../types&interfaces/Item'
@@ -122,7 +122,11 @@ export default function MainPage() {
             )}
           </ResultContext.Provider>
           {pages > 0 && searchResult.length > 1 && (
-            <Pagination pages={pages} onChangePage={handlePagination} activePage={currentPage} />
+            <PaginationButtons
+              pages={pages}
+              onChangePage={handlePagination}
+              activePage={currentPage}
+            />
           )}
         </div>
       </ErrorBoundary>
