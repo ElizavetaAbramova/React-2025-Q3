@@ -1,4 +1,4 @@
-import '../../styles/details.css'
+import '../../styles/product-details.css'
 import { type Item } from '../../types&interfaces/Item'
 import { useEffect, useState } from 'react'
 import getItemById from '../../api/getItemById'
