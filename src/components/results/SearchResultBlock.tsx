@@ -1,14 +1,11 @@
-import Card from './Card'
+import ProductCard from './ProductCard'
 import { type Item } from '../../types&interfaces/Item'
 import { useContext } from 'react'
-import { ResultContext } from './ResultsContext'
+import { SearchResultContext } from './SearchResultContext'
+import '../../styles/search-results-block.css'
 
-interface Props {
-  onItemClick: (id: number) => void
-}
-
-export default function ResultsBlock(props: Props) {
-  const context = useContext(ResultContext)
+export default function SearchResultBlock() {
+  const context = useContext(SearchResultContext)
 
   if (!context) return <p>Error: could not get response from server</p>
 
@@ -20,10 +17,9 @@ export default function ResultsBlock(props: Props) {
     }
 
     return searchResult.map((item: Item) => (
-      <Card
+      <ProductCard
         key={item.id}
         data={item}
-        onClick={() => props.onItemClick(item.id)}
         active={item.id === productId}
         checked={selectedItems.some((selected) => selected.id === item.id)}
       />

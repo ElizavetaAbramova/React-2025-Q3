@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import '@testing-library/jest-dom'
-import ResultsBlock from '../results/ResultsBlock'
-import { ResultContext } from '../results/ResultsContext'
+import SearchResultBlock from '../results/SearchResultBlock'
+import { SearchResultContext } from '../results/SearchResultContext'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import shoppingListReducer from '../../features/shoppingList/shoppingListSlice'
@@ -51,9 +51,9 @@ describe('ResultsBlock', () => {
     }
     render(
       <Provider store={storeMock}>
-        <ResultContext.Provider value={searchContextMock}>
-          <ResultsBlock onItemClick={() => vi.fn()} />
-        </ResultContext.Provider>
+        <SearchResultContext.Provider value={searchContextMock}>
+          <SearchResultBlock onItemClick={() => vi.fn()} />
+        </SearchResultContext.Provider>
       </Provider>,
     )
     expect(document.querySelector('.results-block')).toBeInTheDocument()
@@ -99,9 +99,9 @@ describe('ResultsBlock', () => {
     }
     render(
       <Provider store={storeMock}>
-        <ResultContext.Provider value={searchContextMock}>
-          <ResultsBlock onItemClick={() => vi.fn()} />
-        </ResultContext.Provider>
+        <SearchResultContext.Provider value={searchContextMock}>
+          <SearchResultBlock onItemClick={() => vi.fn()} />
+        </SearchResultContext.Provider>
       </Provider>,
     )
     expect(screen.getByText('Item 1')).toBeInTheDocument()
@@ -110,7 +110,7 @@ describe('ResultsBlock', () => {
   })
 
   it('handles missing or undefined data gracefully', () => {
-    render(<ResultsBlock onItemClick={() => vi.fn()} />)
+    render(<SearchResultBlock onItemClick={() => vi.fn()} />)
     expect(document.querySelector('.results-block')).not.toBeInTheDocument()
     expect(document.querySelectorAll('.result-card').length).toBe(0)
     expect(screen.getByText('Error: could not get response from server')).toBeInTheDocument()

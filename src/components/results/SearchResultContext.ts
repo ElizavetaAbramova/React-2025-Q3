@@ -5,6 +5,7 @@ interface ContextProps {
   searchResult: Item[]
   productId: number
   selectedItems: Item[]
+  handleOpenDetails: (id: number) => void
 }
 
-export const ResultContext = createContext<ContextProps | null>(null)
+export const SearchResultContext = createContext<ContextProps | null>(null)

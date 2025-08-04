@@ -5,7 +5,7 @@ import shoppingListReducer from '../../features/shoppingList/shoppingListSlice'
 import { configureStore } from '@reduxjs/toolkit'
 import type { CardProps } from '../../types&interfaces/CardProps'
 import { Provider } from 'react-redux'
-import Card from '../results/Card'
+import ProductCard from '../results/ProductCard'
 import userEvent from '@testing-library/user-event'
 
 const storeMock = configureStore({
@@ -32,7 +32,7 @@ describe('Card Component', () => {
     }
     render(
       <Provider store={storeMock}>
-        <Card {...mockCardProps}></Card>
+        <ProductCard {...mockCardProps}></ProductCard>
       </Provider>,
     )
     expect(screen.getByText('Test Title')).toBeInTheDocument()
@@ -42,7 +42,7 @@ describe('Card Component', () => {
   it('handles missing props', () => {
     render(
       <Provider store={storeMock}>
-        <Card {...({} as CardProps)}></Card>
+        <ProductCard {...({} as CardProps)}></ProductCard>
       </Provider>,
     )
     expect(screen.queryByText('Test Title')).not.toBeInTheDocument()
@@ -67,7 +67,7 @@ describe('Card Component', () => {
     }
     render(
       <Provider store={storeMock}>
-        <Card {...mockCardProps}></Card>
+        <ProductCard {...mockCardProps}></ProductCard>
       </Provider>,
     )
     const card = screen.getByTestId('card')
@@ -92,7 +92,7 @@ describe('Card Component', () => {
     }
     render(
       <Provider store={storeMock}>
-        <Card {...mockCardProps}></Card>
+        <ProductCard {...mockCardProps}></ProductCard>
       </Provider>,
     )
 

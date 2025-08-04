@@ -1,9 +1,8 @@
 import '../styles/search.css'
-import '../styles/results-block.css'
 import '../styles/main-page.css'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import SearchBar from '../components/search/SearchBar'
-import ResultsBlock from '../components/results/ResultsBlock'
+import SearchResultBlock from '../components/results/SearchResultBlock'
 import ErrorBoundary from '../components/errorBoundary/ErrorBoundary'
 import getItems from '../api/getItems'
 import type { Status } from '../types&interfaces/Status'
@@ -12,7 +11,7 @@ import PaginationButtons from '../components/pagination/PaginationButtons'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../store/store'
 import type { Item } from '../types&interfaces/Item'
-import { ResultContext } from '../components/results/ResultsContext'
+import { SearchResultContext } from '../components/results/SearchResultContext'
 import ShoppingList from '../components/ShoppingList/ShoppingList'
 
 export default function MainPage() {
@@ -29,12 +28,15 @@ export default function MainPage() {
   const selectedItems = useSelector<RootState, Item[]>((state) => state.shoppingList.list)
   const skip = 10
 
-  const handleOpenDetails = (id: number) => {
-    setDetailsStatus(true)
-    setProductId(id)
-    const queryString = searchParams.toString()
-    navigate(`productId/${id}?${queryString}`)
-  }
+  const handleOpenDetails = useCallback(
+    (id: number) => {
+      setDetailsStatus(true)
+      setProductId(id)
+      const queryString = searchParams.toString()
+      navigate(`productId/${id}?${queryString}`)
+    },
+    [navigate, searchParams],
+  )
 
   const handleCloseDetails = () => {
     setDetailsStatus(false)
@@ -101,8 +103,9 @@ export default function MainPage() {
       searchResult,
       productId,
       selectedItems,
+      handleOpenDetails,
     }),
-    [searchResult, productId, selectedItems],
+    [searchResult, productId, selectedItems, handleOpenDetails],
   )
 
   return (
@@ -114,13 +117,11 @@ export default function MainPage() {
             <SearchBar onSearch={handleSearch}></SearchBar>
             {selectedItems.length !== 0 && <ShoppingList list={selectedItems}></ShoppingList>}
           </div>
-          <ResultContext.Provider value={contextValue}>
+          <SearchResultContext.Provider value={contextValue}>
             {status === 'error' && <p>Error: could not get response from server</p>}
             {status === 'loading' && <p>Loading...</p>}
-            {searchResult && status === 'fulfilled' && (
-              <ResultsBlock onItemClick={handleOpenDetails} />
-            )}
-          </ResultContext.Provider>
+            {searchResult && status === 'fulfilled' && <SearchResultBlock />}
+          </SearchResultContext.Provider>
           {pages > 0 && searchResult.length > 1 && (
             <PaginationButtons
               pages={pages}
