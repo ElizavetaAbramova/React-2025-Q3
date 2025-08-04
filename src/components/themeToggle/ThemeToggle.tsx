@@ -10,6 +10,8 @@ export default function ThemeSwitcher() {
   const handleClick = () => {
     const newTheme = currentTheme === 'light' ? 'dark' : 'light'
     dispatch(setTheme(newTheme))
+    document.body.classList.remove('light', 'dark')
+    document.body.classList.add(newTheme)
   }
 
   return (
