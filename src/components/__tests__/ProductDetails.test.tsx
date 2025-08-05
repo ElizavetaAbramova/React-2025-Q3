@@ -1,16 +1,13 @@
 import '@testing-library/jest-dom'
 import ProductDetails from '../productDetails/ProductDetails'
 import { describe, expect, it, vi } from 'vitest'
-import getItemById from '../../api/getItemById'
 import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { useOutletContext } from 'react-router'
 import userEvent from '@testing-library/user-event'
-
-vi.mock('../../api/getItemById', () => ({
-  default: vi.fn(),
-}))
-const mockedGetItemById = vi.mocked(getItemById)
+import { Provider } from 'react-redux'
+import { configureStore } from '@reduxjs/toolkit'
+import { api } from '../../api/api'
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router')
@@ -20,17 +17,35 @@ vi.mock('react-router', async () => {
   }
 })
 const mockedUseContext = vi.mocked(useOutletContext)
+const mockStore = configureStore({
+  reducer: {
+    [api.reducerPath]: api.reducer,
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
+})
+
+const mockProduct = {
+  id: 1,
+  title: 'string',
+  description: 'description string',
+  images: [],
+  availabilityStatus: 'none',
+  brand: 'string',
+  price: 1.99,
+}
 
 describe('Details', () => {
   it('renders loading state initially', () => {
-    mockedGetItemById.mockReturnValue(new Promise(() => {}))
     mockedUseContext.mockReturnValue({
       productId: 5,
       handleCloseDetails: vi.fn(),
     })
+    mockStore.dispatch(api.util.upsertQueryData('getItemById', 1, mockProduct))
     render(
       <MemoryRouter>
-        <ProductDetails />
+        <Provider store={mockStore}>
+          <ProductDetails />
+        </Provider>
       </MemoryRouter>,
     )
     expect(screen.getByText('Loading...')).toBeInTheDocument()
@@ -40,9 +55,12 @@ describe('Details', () => {
       productId: null,
       handleCloseDetails: vi.fn(),
     })
+
     render(
       <MemoryRouter>
-        <ProductDetails />
+        <Provider store={mockStore}>
+          <ProductDetails />
+        </Provider>
       </MemoryRouter>,
     )
     expect(screen.getByText('Ooops! Something went wrong.')).toBeInTheDocument()
@@ -52,18 +70,12 @@ describe('Details', () => {
       productId: 1,
       handleCloseDetails: vi.fn(),
     })
-    mockedGetItemById.mockResolvedValue({
-      id: 1,
-      title: 'string',
-      description: 'description string',
-      images: [],
-      availabilityStatus: 'none',
-      brand: 'string',
-      price: 1.99,
-    })
+    mockStore.dispatch(api.util.upsertQueryData('getItemById', 1, mockProduct))
     render(
       <MemoryRouter>
-        <ProductDetails />
+        <Provider store={mockStore}>
+          <ProductDetails />
+        </Provider>
       </MemoryRouter>,
     )
     expect(screen.queryByText('Ooops! Something went wrong.')).not.toBeInTheDocument()
@@ -82,7 +94,9 @@ describe('Details', () => {
 
     render(
       <MemoryRouter>
-        <ProductDetails />
+        <Provider store={mockStore}>
+          <ProductDetails />
+        </Provider>
       </MemoryRouter>,
     )
     const button = screen.getByRole('button')

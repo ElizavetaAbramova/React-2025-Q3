@@ -7,7 +7,9 @@ import Page404 from '../../pages/Page404'
 import MainPage from '../../pages/MainPage'
 import AboutPage from '../../pages/AboutPage'
 import ProductDetails from '../productDetails/ProductDetails'
-import getItemById from '../../api/getItemById'
+import { configureStore } from '@reduxjs/toolkit'
+import { api } from '../../api/api'
+import { Provider } from 'react-redux'
 
 describe('Router', () => {
   it('renders MainPage on / route', async () => {
@@ -82,11 +84,13 @@ describe('Router', () => {
   })
 
   it('renders Details with context from Outlet', async () => {
-    vi.mock('../../api/getItemById', () => ({
-      default: vi.fn(),
-    }))
-    const mockedGetItemById = vi.mocked(getItemById)
-    mockedGetItemById.mockResolvedValue({
+    const mockStore = configureStore({
+      reducer: {
+        [api.reducerPath]: api.reducer,
+      },
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
+    })
+    const mockProduct = {
       id: 1,
       title: 'string',
       description: 'description string',
@@ -94,10 +98,13 @@ describe('Router', () => {
       availabilityStatus: 'none',
       brand: 'string',
       price: 1.99,
-    })
+    }
+    mockStore.dispatch(api.util.upsertQueryData('getItemById', 1, mockProduct))
 
     const MockContextProvider = () => (
-      <Outlet context={{ productId: 1, handleCloseDetails: vi.fn() }} />
+      <Provider store={mockStore}>
+        <Outlet context={{ productId: 1, handleCloseDetails: vi.fn() }} />
+      </Provider>
     )
 
     const router = createMemoryRouter(

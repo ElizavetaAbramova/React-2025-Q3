@@ -1,8 +1,6 @@
 import '../../styles/product-details.css'
-import { type Item } from '../../types&interfaces/Item'
-import { useEffect, useState } from 'react'
-import getItemById from '../../api/getItemById'
 import { useOutletContext } from 'react-router'
+import { useGetItemByIdQuery } from '../../api/api'
 
 interface Props {
   productId: number
@@ -11,24 +9,13 @@ interface Props {
 
 export default function ProductDetails() {
   const { productId, handleCloseDetails } = useOutletContext<Props>()
-  const [product, setProduct] = useState<Item>()
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-
-  useEffect(() => {
-    if (productId && productId !== 0) {
-      setLoading(true)
-      setError(false)
-      getItemById(productId.toString())
-        .then((data) => setProduct(data))
-        .catch(() => setError(true))
-        .finally(() => {
-          setLoading(false)
-        })
-    } else {
-      setError(true)
-    }
-  }, [productId])
+  const {
+    data: product,
+    isFetching,
+    isError,
+  } = useGetItemByIdQuery(productId, {
+    skip: productId === 0 || productId === null,
+  })
 
   return (
     <div className="details-block">
@@ -36,9 +23,9 @@ export default function ProductDetails() {
         X
       </button>
       <div className="details-content">
-        {loading && <p>Loading...</p>}
-        {error && <p>Ooops! Something went wrong.</p>}
-        {!loading && product && (
+        {isFetching && <p>Loading...</p>}
+        {(isError || !productId) && <p>Ooops! Something went wrong.</p>}
+        {!isFetching && product && (
           <>
             <img
               src={product.images[1] || '/assets/image-placeholder.png'}
