@@ -13,6 +13,7 @@ export default function ProductDetails() {
     data: product,
     isFetching,
     isError,
+    refetch,
   } = useGetItemByIdQuery(productId, {
     skip: productId === 0 || productId === null,
   })
@@ -25,7 +26,7 @@ export default function ProductDetails() {
       <div className="details-content">
         {isFetching && <p>Loading...</p>}
         {(isError || !productId) && <p>Ooops! Something went wrong.</p>}
-        {!isFetching && product && (
+        {!isFetching && !isError && product && (
           <>
             <img
               src={product.images[1] || '/assets/image-placeholder.png'}
@@ -40,6 +41,7 @@ export default function ProductDetails() {
           </>
         )}
       </div>
+      <button onClick={() => refetch()}>Refresh</button>
     </div>
   )
 }

@@ -20,7 +20,7 @@ export function useMainPageState() {
   const page = Number(searchParams.get('page') ?? '1')
   const offset = (page - 1) * 10
 
-  const { data, isLoading, isError, isSuccess, isFetching } = useGetItemsQuery(
+  const { data, isLoading, isError, isSuccess, isFetching, refetch } = useGetItemsQuery(
     { param: search, offset },
     { skip: search === null },
   )
@@ -69,15 +69,12 @@ export function useMainPageState() {
   const status: Status =
     isLoading || isFetching ? 'loading' : isError ? 'error' : isSuccess ? 'success' : 'empty'
 
-  const contextValue = useMemo(
-    () => ({
-      searchResult: data?.list || [],
-      productId: Number(productId) || 0,
-      selectedItems,
-      handleOpenDetails,
-    }),
-    [data, productId, selectedItems, handleOpenDetails],
-  )
+  const contextValue = {
+    searchResult: data?.list || [],
+    productId: Number(productId) || 0,
+    selectedItems,
+    handleOpenDetails,
+  }
 
   useMemo(() => {
     if (location.pathname.includes('productId')) {
@@ -87,7 +84,7 @@ export function useMainPageState() {
       setSearchQuery(search)
       setCurrentPage(page)
     }
-  }, [searchParams])
+  }, [location.pathname, page, search])
 
   return {
     status,
@@ -101,5 +98,6 @@ export function useMainPageState() {
     handleCloseDetails,
     handlePagination,
     handleSearch,
+    refetch,
   }
 }

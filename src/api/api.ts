@@ -10,6 +10,7 @@ interface GetItemsResponse {
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://dummyjson.com/' }),
+  tagTypes: ['Item', 'Items'],
   endpoints: (builder) => ({
     getItems: builder.query<GetItemsResponse, { param: string; offset: number }>({
       query: ({ param, offset }) => {
@@ -24,9 +25,13 @@ export const api = createApi({
         total: response.total,
         currentPage: response.skip + 1,
       }),
+      keepUnusedDataFor: 60,
+      providesTags: ['Items'],
     }),
     getItemById: builder.query<Item, number>({
       query: (id) => `products/${id.toString()}`,
+      keepUnusedDataFor: 30,
+      providesTags: ['Item'],
     }),
   }),
 })

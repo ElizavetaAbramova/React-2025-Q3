@@ -8,6 +8,8 @@ import PaginationButtons from '../components/pagination/PaginationButtons'
 import { SearchResultContext } from '../components/results/SearchResultContext'
 import SelectedItemsFlyout from '../components/SelectedItemsFlyout/SelectedItemsFlyout'
 import { useMainPageState } from '../hooks/useMainPageState'
+import { api } from '../api/api'
+import { useDispatch } from 'react-redux'
 
 export default function MainPage() {
   const {
@@ -15,14 +17,16 @@ export default function MainPage() {
     contextValue,
     isDetailsOpen,
     productId,
-    handleCloseDetails,
     pages,
     searchResult,
     currentPage,
-    handlePagination,
     selectedItems,
+    handlePagination,
+    handleCloseDetails,
     handleSearch,
   } = useMainPageState()
+
+  const dispatch = useDispatch()
 
   return (
     <div className="main-page" data-testid={'main'}>
@@ -31,6 +35,13 @@ export default function MainPage() {
           <h2 className="main-text">What are you looking for?</h2>
           <div className="buttons-block">
             <SearchBar onSearch={handleSearch}></SearchBar>
+            <button
+              onClick={() => {
+                dispatch(api.util.invalidateTags(['Items']))
+              }}
+            >
+              Refresh
+            </button>
             {selectedItems.length !== 0 && (
               <SelectedItemsFlyout list={selectedItems}></SelectedItemsFlyout>
             )}
