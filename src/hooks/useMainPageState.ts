@@ -1,0 +1,105 @@
+import { useCallback, useMemo, useState } from 'react'
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
+import type { Status } from '../types&interfaces/Status'
+import type { Item } from '../types&interfaces/Item'
+import { useSelector } from 'react-redux'
+import type { RootState } from '../store/store'
+import { useGetItemsQuery } from '../api/api'
+
+export function useMainPageState() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { productId } = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [isDetailsOpen, setDetailsStatus] = useState(false)
+  const [searchQuery, setSearchQuery] = useState<string | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const selectedItems = useSelector<RootState, Item[]>((state) => state.selectedItemsList.list)
+
+  const search = searchParams.get('search') ?? ''
+  const page = Number(searchParams.get('page') ?? '1')
+  const offset = (page - 1) * 10
+
+  const { data, isLoading, isError, isSuccess, isFetching } = useGetItemsQuery(
+    { param: search, offset },
+    { skip: search === null },
+  )
+
+  const handleOpenDetails = useCallback(
+    (id: number) => {
+      setDetailsStatus(true)
+      const queryString = searchParams.toString()
+      navigate(`productId/${id}?${queryString}`)
+    },
+    [navigate, searchParams],
+  )
+
+  const handleCloseDetails = () => {
+    setDetailsStatus(false)
+    navigate('/')
+    const search = searchParams.get('search')
+    if (search || search === '') {
+      setSearchParams({ search: searchQuery || '', page: currentPage.toString() })
+    }
+  }
+
+  const handlePagination = (page: number) => {
+    const params = new URLSearchParams(searchParams)
+    const q = searchParams.get('search') || ''
+    params.set('page', page.toString())
+    if (isDetailsOpen) {
+      handleCloseDetails()
+    }
+    handleSearch(q, page)
+  }
+
+  const handleSearch = (query: string, page: number) => {
+    if (isDetailsOpen) {
+      handleCloseDetails()
+    }
+
+    const params = new URLSearchParams(searchParams)
+    params.set('search', query)
+    params.set('page', page.toString())
+    setSearchParams(params)
+  }
+
+  const pages = data ? Math.ceil(data.total / 10) : 0
+
+  const status: Status =
+    isLoading || isFetching ? 'loading' : isError ? 'error' : isSuccess ? 'success' : 'empty'
+
+  const contextValue = useMemo(
+    () => ({
+      searchResult: data?.list || [],
+      productId: Number(productId) || 0,
+      selectedItems,
+      handleOpenDetails,
+    }),
+    [data, productId, selectedItems, handleOpenDetails],
+  )
+
+  useMemo(() => {
+    if (location.pathname.includes('productId')) {
+      setDetailsStatus(true)
+    }
+    if (search || search === '') {
+      setSearchQuery(search)
+      setCurrentPage(page)
+    }
+  }, [searchParams])
+
+  return {
+    status,
+    contextValue,
+    isDetailsOpen,
+    productId,
+    pages,
+    selectedItems,
+    searchResult: data?.list || [],
+    currentPage,
+    handleCloseDetails,
+    handlePagination,
+    handleSearch,
+  }
+}

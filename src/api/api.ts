@@ -11,13 +11,13 @@ export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://dummyjson.com/' }),
   endpoints: (builder) => ({
-    getItems: builder.query<GetItemsResponse, { param: string; skip: number }>({
-      query: ({ param, skip }) => {
+    getItems: builder.query<GetItemsResponse, { param: string; offset: number }>({
+      query: ({ param, offset }) => {
         const limit = 10
         const encoded = encodeURIComponent(param)
         return param === ''
-          ? `products/search?limit=${limit}&skip=${skip}`
-          : `products/search?q=${encoded}&limit=${limit}&skip=${skip}`
+          ? `products/search?limit=${limit}&skip=${offset}`
+          : `products/search?q=${encoded}&limit=${limit}&skip=${offset}`
       },
       transformResponse: (response: { products: Item[]; total: number; skip: number }) => ({
         list: response.products,

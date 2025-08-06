@@ -1,112 +1,28 @@
 import '../styles/search.css'
 import '../styles/main-page.css'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import SearchBar from '../components/search/SearchBar'
 import SearchResultBlock from '../components/results/SearchResultBlock'
 import ErrorBoundary from '../components/errorBoundary/ErrorBoundary'
-import getItems from '../api/getItems'
-import type { Status } from '../types&interfaces/Status'
-import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router'
+import { Outlet } from 'react-router'
 import PaginationButtons from '../components/pagination/PaginationButtons'
-import { useSelector } from 'react-redux'
-import type { RootState } from '../store/store'
-import type { Item } from '../types&interfaces/Item'
 import { SearchResultContext } from '../components/results/SearchResultContext'
 import SelectedItemsFlyout from '../components/SelectedItemsFlyout/SelectedItemsFlyout'
+import { useMainPageState } from '../hooks/useMainPageState'
 
 export default function MainPage() {
-  const navigate = useNavigate()
-  const [searchParams, setSearchParams] = useSearchParams()
-  const [searchQuery, setSearchQuery] = useState<string | null>(null)
-  const [status, setStatus] = useState<Status>('empty')
-  const [searchResult, setSearchResult] = useState<Item[]>([])
-  const [isDetailsOpen, setDetailsStatus] = useState(false)
-  const [productId, setProductId] = useState<number>(0)
-  const [pages, setPages] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
-  const location = useLocation()
-  const selectedItems = useSelector<RootState, Item[]>((state) => state.selectedItemsList.list)
-  const skip = 10
-
-  const handleOpenDetails = useCallback(
-    (id: number) => {
-      setDetailsStatus(true)
-      setProductId(id)
-      const queryString = searchParams.toString()
-      navigate(`productId/${id}?${queryString}`)
-    },
-    [navigate, searchParams],
-  )
-
-  const handleCloseDetails = () => {
-    setDetailsStatus(false)
-    setProductId(0)
-    navigate('/')
-    const search = searchParams.get('search')
-    if (search || search === '') {
-      setSearchParams({ search: searchQuery || '', page: currentPage.toString() })
-    }
-  }
-
-  const handlePagination = (page: number) => {
-    const params = new URLSearchParams(searchParams)
-    const q = searchParams.get('search') || ''
-    params.set('page', page.toString())
-    if (isDetailsOpen) {
-      handleCloseDetails()
-    }
-    handleSearch(q, page)
-  }
-
-  const handleSearch = (query: string, page: number) => {
-    if (isDetailsOpen) {
-      handleCloseDetails()
-    }
-
-    const params = new URLSearchParams(searchParams)
-    params.set('search', query)
-    params.set('page', page.toString())
-    setSearchParams(params)
-  }
-
-  useEffect(() => {
-    const page = searchParams.get('page')
-    const search = searchParams.get('search')
-
-    if (location.pathname.includes('product')) {
-      handleCloseDetails()
-    }
-
-    if (search || search === '') {
-      const shift = (Number(page) - 1) * skip
-      setStatus('loading')
-      setSearchQuery(search)
-      setCurrentPage(Number(page))
-      getItems(search, shift)
-        .then((result) => {
-          setPages(Math.ceil(result.total / skip))
-          setSearchResult(result.list)
-          setStatus('fulfilled')
-        })
-        .catch(() => {
-          setStatus('error')
-        })
-    } else {
-      setStatus('empty')
-      setSearchResult([])
-      setSearchQuery(null)
-    }
-  }, [searchParams, skip])
-
-  const contextValue = useMemo(
-    () => ({
-      searchResult,
-      productId,
-      selectedItems,
-      handleOpenDetails,
-    }),
-    [searchResult, productId, selectedItems, handleOpenDetails],
-  )
+  const {
+    status,
+    contextValue,
+    isDetailsOpen,
+    productId,
+    handleCloseDetails,
+    pages,
+    searchResult,
+    currentPage,
+    handlePagination,
+    selectedItems,
+    handleSearch,
+  } = useMainPageState()
 
   return (
     <div className="main-page" data-testid={'main'}>
@@ -122,7 +38,8 @@ export default function MainPage() {
           <SearchResultContext.Provider value={contextValue}>
             {status === 'error' && <p>Error: could not get response from server</p>}
             {status === 'loading' && <p>Loading...</p>}
-            {searchResult && status === 'fulfilled' && <SearchResultBlock />}
+            {status === 'empty' && <p>No results</p>}
+            {searchResult && status === 'success' && <SearchResultBlock />}
           </SearchResultContext.Provider>
           {pages > 0 && searchResult.length > 1 && (
             <PaginationButtons
