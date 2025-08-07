@@ -12,18 +12,16 @@ export default function SearchResultBlock() {
   const { searchResult, productId, selectedItems } = context
 
   const renderContent = () => {
-    if (searchResult.length === 0) {
-      return <p>No results</p>
+    if (searchResult.length !== 0) {
+      return searchResult.map((item: Item) => (
+        <ProductCard
+          key={item.id}
+          data={item}
+          active={item.id === productId}
+          checked={selectedItems.some((selected) => selected.id === item.id)}
+        />
+      ))
     }
-
-    return searchResult.map((item: Item) => (
-      <ProductCard
-        key={item.id}
-        data={item}
-        active={item.id === productId}
-        checked={selectedItems.some((selected) => selected.id === item.id)}
-      />
-    ))
   }
 
   return <div className="results-block">{renderContent()}</div>

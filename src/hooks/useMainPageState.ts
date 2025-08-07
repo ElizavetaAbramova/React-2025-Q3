@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
-import type { Status } from '../types&interfaces/Status'
 import type { Item } from '../types&interfaces/Item'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../store/store'
@@ -17,7 +16,7 @@ export function useMainPageState() {
   const selectedItems = useSelector<RootState, Item[]>((state) => state.selectedItemsList.list)
 
   const search = searchParams.get('search') ?? ''
-  const page = Number(searchParams.get('page') ?? '1')
+  const page = Number(searchParams.get('page') ?? 1)
   const offset = (page - 1) * 10
 
   const { data, isLoading, isError, isSuccess, isFetching, refetch } = useGetItemsQuery(
@@ -66,16 +65,6 @@ export function useMainPageState() {
 
   const pages = data ? Math.ceil(data.total / 10) : 0
 
-  const status: Status =
-    isLoading || isFetching ? 'loading' : isError ? 'error' : isSuccess ? 'success' : 'empty'
-
-  const contextValue = {
-    searchResult: data?.list || [],
-    productId: Number(productId) || 0,
-    selectedItems,
-    handleOpenDetails,
-  }
-
   useMemo(() => {
     if (location.pathname.includes('productId')) {
       setDetailsStatus(true)
@@ -87,14 +76,17 @@ export function useMainPageState() {
   }, [location.pathname, page, search])
 
   return {
-    status,
-    contextValue,
+    isError,
+    isLoading,
+    isFetching,
+    isSuccess,
     isDetailsOpen,
     productId,
     pages,
     selectedItems,
     searchResult: data?.list || [],
     currentPage,
+    handleOpenDetails,
     handleCloseDetails,
     handlePagination,
     handleSearch,

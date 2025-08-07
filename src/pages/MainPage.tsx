@@ -13,8 +13,10 @@ import { useDispatch } from 'react-redux'
 
 export default function MainPage() {
   const {
-    status,
-    contextValue,
+    isError,
+    isFetching,
+    isLoading,
+    isSuccess,
     isDetailsOpen,
     productId,
     pages,
@@ -22,11 +24,19 @@ export default function MainPage() {
     currentPage,
     selectedItems,
     handlePagination,
+    handleOpenDetails,
     handleCloseDetails,
     handleSearch,
   } = useMainPageState()
 
   const dispatch = useDispatch()
+
+  const contextValue = {
+    searchResult,
+    productId: Number(productId) || 0,
+    selectedItems,
+    handleOpenDetails,
+  }
 
   return (
     <div className="main-page" data-testid={'main'}>
@@ -47,10 +57,10 @@ export default function MainPage() {
             )}
           </div>
           <SearchResultContext.Provider value={contextValue}>
-            {status === 'error' && <p>Error: could not get response from server</p>}
-            {status === 'loading' && <p>Loading...</p>}
-            {status === 'empty' && <p>No results</p>}
-            {searchResult && status === 'success' && <SearchResultBlock />}
+            {isError && <p>Error: could not get response from server</p>}
+            {(isLoading || isFetching) && <p>Loading...</p>}
+            {isSuccess && searchResult.length === 0 && <p>No results</p>}
+            {isSuccess && searchResult && <SearchResultBlock />}
           </SearchResultContext.Provider>
           {pages > 0 && searchResult.length > 1 && (
             <PaginationButtons

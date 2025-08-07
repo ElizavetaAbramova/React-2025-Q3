@@ -17,6 +17,7 @@ vi.mock('react-router', async () => {
   }
 })
 const mockedUseContext = vi.mocked(useOutletContext)
+
 const mockStore = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
@@ -99,7 +100,7 @@ describe('Details', () => {
         </Provider>
       </MemoryRouter>,
     )
-    const button = screen.getByRole('button')
+    const button = screen.getByRole('button', { name: 'X' })
     await userEvent.click(button)
     expect(handleCloseDetails).toHaveBeenCalledTimes(1)
   })
