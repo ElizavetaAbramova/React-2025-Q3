@@ -60,7 +60,7 @@ export default function MainPage() {
             {isError && <p>Error: could not get response from server</p>}
             {(isLoading || isFetching) && <p>Loading...</p>}
             {isSuccess && searchResult.length === 0 && <p>No results</p>}
-            {isSuccess && searchResult && <SearchResultBlock />}
+            {!isFetching && isSuccess && searchResult && <SearchResultBlock />}
           </SearchResultContext.Provider>
           {pages > 0 && searchResult.length > 1 && (
             <PaginationButtons
