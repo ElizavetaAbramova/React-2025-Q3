@@ -1,16 +1,16 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type Item } from '../../types&interfaces/Item'
 
-export interface ShoppingListState {
+export interface SelectedItemsListState {
   list: Item[]
 }
 
-const initialState: ShoppingListState = {
+const initialState: SelectedItemsListState = {
   list: [],
 }
 
-const shoppingListSlice = createSlice({
-  name: 'shoppingList',
+const SelectedItemsListSlice = createSlice({
+  name: 'selectedItemsList',
   initialState,
   reducers: {
     addItem(state, action: PayloadAction<Item>) {
@@ -28,6 +28,6 @@ const shoppingListSlice = createSlice({
   },
 })
 
-export const { addItem, deleteItem, clearList } = shoppingListSlice.actions
+export const { addItem, deleteItem, clearList } = SelectedItemsListSlice.actions
 
-export default shoppingListSlice.reducer
+export default SelectedItemsListSlice.reducer

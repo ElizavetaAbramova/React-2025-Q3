@@ -1,18 +1,55 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import '@testing-library/jest-dom'
-import shoppingListReducer from '../../features/shoppingList/shoppingListSlice'
+import shoppingListReducer from '../../features/selectedItemsList/selectedItemsListSlice'
 import { configureStore } from '@reduxjs/toolkit'
 import type { CardProps } from '../../types&interfaces/CardProps'
 import { Provider } from 'react-redux'
-import Card from '../results/Card'
+import ProductCard from '../results/ProductCard'
 import userEvent from '@testing-library/user-event'
+import { SearchResultContext } from '../results/SearchResultContext'
 
 const storeMock = configureStore({
   reducer: {
     shoppingList: shoppingListReducer,
   },
 })
+
+const searchContextMock = {
+  searchResult: [
+    {
+      id: 1,
+      title: 'Item 1',
+      images: ['test.png'],
+      description: 'description string',
+      availabilityStatus: 'string',
+      brand: 'string',
+      price: 1,
+    },
+    {
+      id: 2,
+      title: 'Item 2',
+      images: ['test.png'],
+      description: 'description string',
+      availabilityStatus: 'string',
+      brand: 'string',
+      price: 1,
+    },
+  ],
+  productId: 2,
+  selectedItems: [
+    {
+      id: 1,
+      title: 'Item 1',
+      images: ['test.png'],
+      description: 'description string',
+      availabilityStatus: 'string',
+      brand: 'string',
+      price: 1,
+    },
+  ],
+  handleOpenDetails: vi.fn(),
+}
 
 describe('Card Component', () => {
   it('displays card component and item name', () => {
@@ -26,13 +63,14 @@ describe('Card Component', () => {
         brand: 'Gussi',
         price: 45,
       },
-      onClick: vi.fn(),
       active: false,
       checked: false,
     }
     render(
       <Provider store={storeMock}>
-        <Card {...mockCardProps}></Card>
+        <SearchResultContext.Provider value={searchContextMock}>
+          <ProductCard {...mockCardProps}></ProductCard>
+        </SearchResultContext.Provider>
       </Provider>,
     )
     expect(screen.getByText('Test Title')).toBeInTheDocument()
@@ -42,7 +80,7 @@ describe('Card Component', () => {
   it('handles missing props', () => {
     render(
       <Provider store={storeMock}>
-        <Card {...({} as CardProps)}></Card>
+        <ProductCard {...({} as CardProps)}></ProductCard>
       </Provider>,
     )
     expect(screen.queryByText('Test Title')).not.toBeInTheDocument()
@@ -61,18 +99,19 @@ describe('Card Component', () => {
         brand: 'Gussi',
         price: 45,
       },
-      onClick: vi.fn(),
       active: false,
       checked: false,
     }
     render(
       <Provider store={storeMock}>
-        <Card {...mockCardProps}></Card>
+        <SearchResultContext.Provider value={searchContextMock}>
+          <ProductCard {...mockCardProps}></ProductCard>
+        </SearchResultContext.Provider>
       </Provider>,
     )
     const card = screen.getByTestId('card')
     await userEvent.click(card)
-    expect(mockCardProps.onClick).toBeCalled()
+    expect(searchContextMock.handleOpenDetails).toBeCalled()
   })
 
   it('add item to list when user clicked on checkbox', async () => {
@@ -86,13 +125,14 @@ describe('Card Component', () => {
         brand: 'Gussi',
         price: 45,
       },
-      onClick: vi.fn(),
       active: false,
       checked: false,
     }
     render(
       <Provider store={storeMock}>
-        <Card {...mockCardProps}></Card>
+        <SearchResultContext.Provider value={searchContextMock}>
+          <ProductCard {...mockCardProps}></ProductCard>
+        </SearchResultContext.Provider>
       </Provider>,
     )
 

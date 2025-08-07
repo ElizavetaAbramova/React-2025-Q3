@@ -1,13 +1,13 @@
 import type { Item } from '../../types&interfaces/Item'
-import '../../styles/shopping-list-block.css'
+import '../../styles/selected-items-flyout-block.css'
 import { useDispatch } from 'react-redux'
-import { clearList } from '../../features/shoppingList/shoppingListSlice'
+import { clearList } from '../../features/selectedItemsList/selectedItemsListSlice'
 
 interface Props {
   list: Item[]
 }
 
-export default function ShoppingList(props: Props) {
+export default function SelectedItemsFlyout(props: Props) {
   const dispatch = useDispatch()
   const downloadList = () => {
     if (props.list.length !== 0) {

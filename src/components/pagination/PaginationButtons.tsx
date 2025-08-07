@@ -5,23 +5,19 @@ interface Props {
   activePage: number
 }
 
-export default function Pagination(props: Props) {
+export default function PaginationButtons(props: Props) {
   const createButtons = (count: number) => {
     const arrayOfButtons = []
     for (let i = 0; i < count; i++) {
+      let className = 'pagination-button'
+
       if (i + 1 === props.activePage) {
+        className = `${className}-active`
+      }
+
+      if (i < props.activePage + 2 && i >= props.activePage - 3) {
         arrayOfButtons.push(
-          <button
-            className="pagination-button-active"
-            key={i}
-            onClick={() => props.onChangePage(i + 1)}
-          >
-            {i + 1}
-          </button>,
-        )
-      } else if (props.activePage + 2 > i && props.activePage - 2 <= i + 1) {
-        arrayOfButtons.push(
-          <button className="pagination-button" key={i} onClick={() => props.onChangePage(i + 1)}>
+          <button className={`${className}`} key={i} onClick={() => props.onChangePage(i + 1)}>
             {i + 1}
           </button>,
         )
