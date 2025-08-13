@@ -10,7 +10,13 @@ type RootLayoutProps = {
   children: React.ReactNode
   params: { locale: string }
 }
-
+// eslint-disable-next-line react-refresh/only-export-components
+export const metadata = {
+  title: 'Search',
+  icons: {
+    icon: '/searching-icon.png',
+  },
+}
 export default async function RootLayout({ children }: RootLayoutProps) {
   const locale = 'en'
 

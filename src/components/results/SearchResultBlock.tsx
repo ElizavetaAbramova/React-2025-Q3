@@ -20,7 +20,7 @@ export default function SearchResultBlock() {
           data={item}
           active={item.id === productId}
           checked={selectedItems.some((selected) => selected.id === item.id)}
-        />
+        ></ProductCard>
       ))
     }
   }

@@ -24,6 +24,6 @@
     "incremental": true,
     "composite": true
   },
-  "include": ["src", "./dist/types/**/*.ts", "./next-env.d.ts", "next", "middelware.ts"],
+  "include": ["src", "./dist/types/**/*.ts", "./next-env.d.ts", "src/middelware.ts"],
   "exclude": ["./node_modules"]
 }

@@ -4,29 +4,28 @@ import '../styles/main-page.css'
 import SearchBar from '../components/search/SearchBar'
 import SearchResultBlock from '../components/results/SearchResultBlock'
 import ErrorBoundary from '../components/errorBoundary/ErrorBoundary'
-import { Outlet } from 'react-router'
 import PaginationButtons from '../components/pagination/PaginationButtons'
 import { SearchResultContext } from '../components/results/SearchResultContext'
 import SelectedItemsFlyout from '../components/SelectedItemsFlyout/SelectedItemsFlyout'
 import { useMainPageState } from '../hooks/useMainPageState'
 import { api } from '../api/api'
 import { useDispatch } from 'react-redux'
+interface MainPageProps {
+  children?: React.ReactNode
+}
 
-export default function MainPage() {
+export default function MainPage({ children }: MainPageProps) {
   const {
     isError,
     isFetching,
     isLoading,
     isSuccess,
-    isDetailsOpen,
     productId,
     pages,
     searchResult,
     currentPage,
     selectedItems,
     handlePagination,
-    handleOpenDetails,
-    handleCloseDetails,
     handleSearch,
   } = useMainPageState()
 
@@ -36,7 +35,6 @@ export default function MainPage() {
     searchResult,
     productId: Number(productId) || 0,
     selectedItems,
-    handleOpenDetails,
   }
 
   return (
@@ -47,6 +45,7 @@ export default function MainPage() {
           <div className="buttons-block">
             <SearchBar onSearch={handleSearch}></SearchBar>
             <button
+              style={{ maxHeight: '45px' }}
               onClick={() => {
                 dispatch(api.util.invalidateTags(['Items']))
               }}
@@ -73,7 +72,7 @@ export default function MainPage() {
         </div>
       </ErrorBoundary>
       <ErrorBoundary fallback={<p>Something went wrong, try to reload page</p>}>
-        {isDetailsOpen && <Outlet context={{ productId, handleCloseDetails }}></Outlet>}
+        {children}
       </ErrorBoundary>
     </div>
   )

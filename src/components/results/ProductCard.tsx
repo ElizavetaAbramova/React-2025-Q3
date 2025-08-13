@@ -5,8 +5,12 @@ import { useDispatch } from 'react-redux'
 import { addItem, deleteItem } from '../../features/selectedItemsList/selectedItemsListSlice'
 import type { CardProps } from '../../types&interfaces/CardProps'
 import { SearchResultContext } from './SearchResultContext'
+import Image from 'next/image'
+import { usePathname, useRouter } from 'next/navigation'
 
 export default function ProductCard(props: CardProps) {
+  const router = useRouter()
+  const pathname = usePathname()
   const context = useContext(SearchResultContext)
   const dispatch = useDispatch()
   const { data } = props
@@ -18,7 +22,11 @@ export default function ProductCard(props: CardProps) {
     const target = event.target as HTMLElement
 
     if (target.tagName !== 'INPUT' && target.tagName !== 'LABEL') {
-      context.handleOpenDetails(data.id)
+      if (pathname?.includes('productId')) {
+        router.push(`${data.id}`)
+      } else {
+        router.push(`productId/${data.id}`)
+      }
     }
   }
 
@@ -34,12 +42,13 @@ export default function ProductCard(props: CardProps) {
 
   return (
     <div className={className} onClick={handleClick} data-testid={'card'}>
-      <img
-        src={data.images[0] || 'assets/image-placeholder.png'}
+      <Image
+        src={data.images[0] || '/assets/image-placeholder.png'}
         alt="product-image"
         width={100}
         height={100}
-      />
+        priority={true}
+      ></Image>
       <div>{data.title}</div>
       <label className="checkbox-label">
         <input
