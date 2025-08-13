@@ -1,3 +1,4 @@
+'use client'
 import type { Item } from '../../types&interfaces/Item'
 import '../../styles/selected-items-flyout-block.css'
 import { useDispatch } from 'react-redux'
@@ -9,33 +10,27 @@ interface Props {
 
 export default function SelectedItemsFlyout(props: Props) {
   const dispatch = useDispatch()
-  const downloadList = () => {
+  const downloadList = async () => {
     if (props.list.length !== 0) {
-      const headers: (keyof Item)[] = [
-        'id',
-        'title',
-        'description',
-        'images',
-        'availabilityStatus',
-        'brand',
-        'price',
-      ]
+      const response = await fetch('/api/download-csv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ list: props.list }),
+      })
 
-      const csvRows = []
-      csvRows.push(headers.join(','))
-      for (const item of props.list) {
-        const row = headers.map((header) => `"${item[header]}"`)
-        csvRows.push(row.join(','))
+      if (!response.ok) {
+        console.error('Failed to download CSV')
+        return
       }
 
-      const csvFile = csvRows.join('\n')
-      const file = new File([csvFile], `${props.list.length}_items.csv`, { type: 'text/csv' })
+      const file = await response.blob()
       const url = URL.createObjectURL(file)
       const element = document.createElement('a')
       element.href = url
       element.download = `${props.list.length}_items.csv`
       document.body.appendChild(element)
       element.click()
+      element.remove()
     }
   }
 

@@ -1,3 +1,4 @@
+'use client'
 import '../../styles/theme-switcher.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { setTheme } from '../../features/theme/themeSlice'

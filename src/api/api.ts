@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import type { Item } from '../types&interfaces/Item'
 
-interface GetItemsResponse {
+export interface GetItemsResponse {
   list: Item[]
   total: number
   currentPage: number

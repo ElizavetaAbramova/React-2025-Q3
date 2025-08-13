@@ -1,3 +1,4 @@
+'use client'
 import { useContext, type SyntheticEvent } from 'react'
 import '../../styles/card.css'
 import { useDispatch } from 'react-redux'

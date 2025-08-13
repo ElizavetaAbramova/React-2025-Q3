@@ -1,3 +1,4 @@
+'use client'
 import '../../styles/pagination.css'
 interface Props {
   pages: number

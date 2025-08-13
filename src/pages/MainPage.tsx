@@ -1,3 +1,4 @@
+'use client'
 import '../styles/search.css'
 import '../styles/main-page.css'
 import SearchBar from '../components/search/SearchBar'

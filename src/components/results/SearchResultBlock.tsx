@@ -1,3 +1,4 @@
+'use client'
 import ProductCard from './ProductCard'
 import { type Item } from '../../types&interfaces/Item'
 import { useContext } from 'react'

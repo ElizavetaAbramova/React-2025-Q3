@@ -1,3 +1,4 @@
+'use client'
 import { Component, type ReactElement, type ReactNode } from 'react'
 interface State {
   hasError: boolean
