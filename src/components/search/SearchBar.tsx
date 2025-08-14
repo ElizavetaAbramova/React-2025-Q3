@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-// import useLocalStorage from '../../hooks/useLocalStorage'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 interface SearchBarProps {
   onSearch: (query: string, page: number, shift?: number) => void
@@ -8,8 +8,7 @@ interface SearchBarProps {
 
 export default function SearchBar(props: SearchBarProps) {
   const [input, setInput] = useState('')
-  // const [searchHistory, setSearchHistory] = useLocalStorage('AE-search-history')
-  const [searchHistory, setSearchHistory] = useState('')
+  const [searchHistory, setSearchHistory] = useLocalStorage('AE-search-history')
   const page = 1
 
   useEffect(() => {

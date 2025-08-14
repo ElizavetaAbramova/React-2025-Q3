@@ -20,7 +20,6 @@ export default function MainPage({ children }: MainPageProps) {
     isFetching,
     isLoading,
     isSuccess,
-    productId,
     pages,
     searchResult,
     currentPage,
@@ -33,7 +32,6 @@ export default function MainPage({ children }: MainPageProps) {
 
   const contextValue = {
     searchResult,
-    productId: Number(productId) || 0,
     selectedItems,
   }
 
