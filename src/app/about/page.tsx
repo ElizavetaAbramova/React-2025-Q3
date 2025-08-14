@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import '../../styles/about-page.css'
 
 export default function AboutPage() {
@@ -13,18 +14,18 @@ export default function AboutPage() {
       <div className="links">
         <a href="https://github.com/ElizavetaAbramova" target="_blank" className="GitHub-link">
           <span className="tooltip">My GitHub</span>
-          <img
+          <Image
             src="/assets/github-icon.png"
             alt="GitHub-logo"
             width={100}
             height={100}
             className="github-logo"
-          ></img>
+          ></Image>
         </a>
 
         <a href="https://rs.school/courses/reactjs" target="_blank" className="course-link">
           <span className="tooltip">React course</span>
-          <img
+          <Image
             src="/assets/react.svg"
             width={100}
             height={100}
