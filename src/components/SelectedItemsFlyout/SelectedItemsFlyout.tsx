@@ -3,6 +3,7 @@ import type { Item } from '../../types&interfaces/Item'
 import '../../styles/selected-items-flyout-block.css'
 import { useDispatch } from 'react-redux'
 import { clearList } from '../../features/selectedItemsList/selectedItemsListSlice'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   list: Item[]
@@ -33,15 +34,18 @@ export default function SelectedItemsFlyout(props: Props) {
       element.remove()
     }
   }
+  const t = useTranslations('main')
 
   return (
     <div className="shopping-list-control-block">
-      <p>Selected {props.list.length} item(s)</p>
+      <p>
+        {props.list.length} {t('selected')}
+      </p>
       <button onClick={downloadList} name="download">
-        Download shopping list
+        {t('download')}
       </button>
       <button onClick={() => dispatch(clearList())} name="clear">
-        Clear list
+        {t('clear-list')}
       </button>
     </div>
   )

@@ -2,12 +2,14 @@
 import '../../styles/product-details.css'
 import { useGetItemByIdQuery } from '../../api/api'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 interface Props {
   productId: number
   handleCloseDetails: () => void
 }
 
 export default function ProductDetails({ productId, handleCloseDetails }: Props) {
+  const t = useTranslations('main')
   const {
     data: product,
     isFetching,
@@ -23,8 +25,8 @@ export default function ProductDetails({ productId, handleCloseDetails }: Props)
         X
       </button>
       <div className="details-content">
-        {isFetching && <p>Loading...</p>}
-        {(isError || !productId) && <p>Ooops! Something went wrong.</p>}
+        {isFetching && <p>{t('loading')}</p>}
+        {(isError || !productId) && <p>{t('error-message')}</p>}
         {!isFetching && !isError && product && (
           <>
             <Image
@@ -42,7 +44,7 @@ export default function ProductDetails({ productId, handleCloseDetails }: Props)
           </>
         )}
       </div>
-      <button onClick={() => refetch()}>Refresh</button>
+      <button onClick={() => refetch()}>{t('reload')}</button>
     </div>
   )
 }

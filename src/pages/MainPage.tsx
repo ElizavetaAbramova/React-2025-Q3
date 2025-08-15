@@ -10,11 +10,13 @@ import SelectedItemsFlyout from '../components/SelectedItemsFlyout/SelectedItems
 import { useMainPageState } from '../hooks/useMainPageState'
 import { api } from '../api/api'
 import { useDispatch } from 'react-redux'
+import { useTranslations } from 'next-intl'
 interface MainPageProps {
   children?: React.ReactNode
 }
 
 export default function MainPage({ children }: MainPageProps) {
+  const t = useTranslations('main')
   const {
     isError,
     isFetching,
@@ -37,9 +39,9 @@ export default function MainPage({ children }: MainPageProps) {
 
   return (
     <div className="main-page" data-testid={'main'}>
-      <ErrorBoundary fallback={<p>Something went wrong, try to reload page</p>}>
+      <ErrorBoundary fallback={<p>{t('error-message')}</p>}>
         <div className="search-block">
-          <h2 className="main-text">What are you looking for?</h2>
+          <h2 className="main-text">{t('title')}</h2>
           <div className="buttons-block">
             <SearchBar onSearch={handleSearch}></SearchBar>
             <button
@@ -48,16 +50,16 @@ export default function MainPage({ children }: MainPageProps) {
                 dispatch(api.util.invalidateTags(['Items']))
               }}
             >
-              Refresh
+              {t('reload')}
             </button>
             {selectedItems.length !== 0 && (
               <SelectedItemsFlyout list={selectedItems}></SelectedItemsFlyout>
             )}
           </div>
           <SearchResultContext.Provider value={contextValue}>
-            {isError && <p>Error: could not get response from server</p>}
-            {(isLoading || isFetching) && <p>Loading...</p>}
-            {isSuccess && searchResult.length === 0 && <p>No results</p>}
+            {isError && <p>{t('server-error')}</p>}
+            {(isLoading || isFetching) && <p>{t('loading')}</p>}
+            {isSuccess && searchResult.length === 0 && <p>{t('no-results')}</p>}
             {!isFetching && isSuccess && searchResult && <SearchResultBlock />}
           </SearchResultContext.Provider>
           {pages > 0 && searchResult.length > 1 && (
@@ -69,9 +71,7 @@ export default function MainPage({ children }: MainPageProps) {
           )}
         </div>
       </ErrorBoundary>
-      <ErrorBoundary fallback={<p>Something went wrong, try to reload page</p>}>
-        {children}
-      </ErrorBoundary>
+      <ErrorBoundary fallback={<p>{t('error-message')}</p>}>{children}</ErrorBoundary>
     </div>
   )
 }

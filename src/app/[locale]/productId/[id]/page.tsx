@@ -1,7 +1,8 @@
 'use client'
-import { useParams, useRouter } from 'next/navigation'
-import ProductDetails from '../../../components/productDetails/ProductDetails'
-import MainPage from '../../../pages/MainPage'
+import { useParams } from 'next/navigation'
+import ProductDetails from '../../../../components/productDetails/ProductDetails'
+import MainPage from '../../../../pages/MainPage'
+import { useRouter } from '../../../../i18n/navigation'
 
 export default function ProductDetailPage() {
   const params = useParams()

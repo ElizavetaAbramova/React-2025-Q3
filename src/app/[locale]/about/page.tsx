@@ -1,19 +1,17 @@
+'use client'
 import Image from 'next/image'
-import '../../styles/about-page.css'
+import '../../../styles/about-page.css'
+import { useTranslations } from 'next-intl'
 
 export default function AboutPage() {
+  const t = useTranslations('about')
   return (
     <div className="about-page">
-      <h2>About</h2>
-      <p className="about-text">
-        Hi! My name is Liza, and I built this app as part of my learning journey in the React course
-        by RSSchool. Through this project, I practiced using modern tools like React, React Router,
-        hooks and more. It helped me understand how real-world web applications are structured —
-        from routing to creating own hooks. Thanks for visiting!
-      </p>
+      <h2>{t('title')}</h2>
+      <p className="about-text">{t('text')}</p>
       <div className="links">
         <a href="https://github.com/ElizavetaAbramova" target="_blank" className="GitHub-link">
-          <span className="tooltip">My GitHub</span>
+          <span className="tooltip">{t('github')}</span>
           <Image
             src="/assets/github-icon.png"
             alt="GitHub-logo"
@@ -24,7 +22,7 @@ export default function AboutPage() {
         </a>
 
         <a href="https://rs.school/courses/reactjs" target="_blank" className="course-link">
-          <span className="tooltip">React course</span>
+          <span className="tooltip">{t('course')}</span>
           <Image
             src="/assets/react.svg"
             width={100}

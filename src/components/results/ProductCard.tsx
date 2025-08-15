@@ -6,13 +6,14 @@ import { addItem, deleteItem } from '../../features/selectedItemsList/selectedIt
 import type { CardProps } from '../../types&interfaces/CardProps'
 import { SearchResultContext } from './SearchResultContext'
 import Image from 'next/image'
-import { usePathname, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { useRouter } from '../../i18n/navigation'
 
 export default function ProductCard(props: CardProps) {
   const router = useRouter()
-  const pathname = usePathname()
   const context = useContext(SearchResultContext)
   const dispatch = useDispatch()
+  const t = useTranslations('main')
   const { data } = props
 
   const className = props.active ? 'result-card active' : 'result-card'
@@ -22,11 +23,7 @@ export default function ProductCard(props: CardProps) {
     const target = event.target as HTMLElement
 
     if (target.tagName !== 'INPUT' && target.tagName !== 'LABEL') {
-      if (pathname?.includes('productId')) {
-        router.push(`${data.id}`)
-      } else {
-        router.push(`productId/${data.id}`)
-      }
+      router.push({ pathname: '/productId/[id]', params: { id: data.id } })
     }
   }
 
@@ -57,7 +54,7 @@ export default function ProductCard(props: CardProps) {
           onChange={handleChange}
           checked={props.checked}
         ></input>
-        Add to list
+        {t('add-to-list')}
       </label>
     </div>
   )

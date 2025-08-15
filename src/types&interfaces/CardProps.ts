@@ -8,6 +8,6 @@ export interface CardProps {
     brand: string
     price: number
   }
-  active: boolean
+  active?: boolean
   checked: boolean
 }

@@ -3,12 +3,12 @@ import '../styles/navbar.css'
 import '../App.css'
 
 import { Providers } from '../components/providers'
-import ThemeSwitcher from '../components/themeToggle/ThemeToggle'
-import NavigationButtons from '../components/NavigationButtons'
+
+import { setRequestLocale } from 'next-intl/server'
 
 type RootLayoutProps = {
   children: React.ReactNode
-  params: { locale: string }
+  params: Promise<{ locale: string }>
 }
 // eslint-disable-next-line react-refresh/only-export-components
 export const metadata = {
@@ -17,8 +17,16 @@ export const metadata = {
     icon: '/searching-icon.png',
   },
 }
-export default async function RootLayout({ children }: RootLayoutProps) {
-  const locale = 'en'
+
+// eslint-disable-next-line react-refresh/only-export-components
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'ru' }]
+  // return routing.locales.map((locale) => ({ locale }))
+}
+
+export default async function RootLayout({ children, params }: RootLayoutProps) {
+  const { locale } = await params
+  setRequestLocale(locale)
 
   return (
     <html lang={locale}>
@@ -26,17 +34,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <title>Search</title>
       </head>
       <body className="dark">
-        <Providers>
-          <header className="navbar">
-            <NavigationButtons></NavigationButtons>
-            <ThemeSwitcher></ThemeSwitcher>
-            <button>Language</button>
-          </header>
-          <div id="root">{children}</div>
-          <footer className="footer">
-            <p>© 2025</p>
-          </footer>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

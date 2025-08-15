@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import { useTranslations } from 'next-intl'
 
 interface SearchBarProps {
   onSearch: (query: string, page: number, shift?: number) => void
@@ -10,6 +11,7 @@ export default function SearchBar(props: SearchBarProps) {
   const [input, setInput] = useState('')
   const [searchHistory, setSearchHistory] = useLocalStorage('AE-search-history')
   const page = 1
+  const t = useTranslations('main')
 
   useEffect(() => {
     if (searchHistory) {
@@ -31,12 +33,12 @@ export default function SearchBar(props: SearchBarProps) {
       <input
         name="Search"
         className="search-input"
-        placeholder="ex.: apple"
+        placeholder={t('search-placeholder')}
         onChange={(event) => setInput(event.target.value)}
         value={input}
       ></input>
       <button className="search-button" name="Search" onClick={handleSearchClick}>
-        Search
+        {t('search')}
       </button>
     </div>
   )
