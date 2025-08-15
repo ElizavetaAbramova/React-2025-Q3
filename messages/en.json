@@ -1,0 +1,31 @@
+{
+  "main": {
+    "title": "What are you looking for?",
+    "search": "Search",
+    "search-placeholder": "ex.apples",
+    "error-message": "Something went wrong, try to reload page",
+    "server-error": "Error: could not get response from server",
+    "loading": "Loading...",
+    "reload": "Refresh",
+    "no-results": "No results",
+    "add-to-list": "Add to list",
+    "download": "Download shopping list",
+    "clear-list": "Clear list",
+    "selected": "item(s) selected"
+  },
+  "about": {
+    "title": "Welcome!",
+    "text": "Hi! My name is Liza, and I built this app as part of my learning journey in the React course by RSSchool. Through this project, I practiced using modern tools like React, RTK Query, Next.js and more. It helped me understand how real-world web applications are structured — from routing to creating own hooks. Thanks for visiting!",
+    "github": "My GitHub",
+    "course": "React Course"
+  },
+  "not-found": {},
+  "header": {
+    "main": "Main",
+    "about": "About",
+    "dark": "Dark",
+    "light": "Light",
+    "theme": "theme",
+    "language": "Switch language"
+  }
+}

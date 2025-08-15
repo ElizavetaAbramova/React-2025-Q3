@@ -1,93 +1,65 @@
-import { useCallback, useMemo, useState } from 'react'
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
+'use client'
+import { useMemo, useState } from 'react'
 import type { Item } from '../types&interfaces/Item'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../store/store'
 import { useGetItemsQuery } from '../api/api'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 export function useMainPageState() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { productId } = useParams()
-  const [searchParams, setSearchParams] = useSearchParams()
-  const [isDetailsOpen, setDetailsStatus] = useState(false)
-  const [searchQuery, setSearchQuery] = useState<string | null>(null)
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [currentPage, setCurrentPage] = useState(1)
   const selectedItems = useSelector<RootState, Item[]>((state) => state.selectedItemsList.list)
 
-  const search = searchParams.get('search') ?? ''
-  const page = Number(searchParams.get('page') ?? 1)
+  const search = searchParams?.get('search') ?? ''
+  const page = Number(searchParams?.get('page') ?? 1)
   const offset = (page - 1) * 10
 
   const { data, isLoading, isError, isSuccess, isFetching, refetch } = useGetItemsQuery(
     { param: search, offset },
     { skip: search === null },
   )
-
-  const handleOpenDetails = useCallback(
-    (id: number) => {
-      setDetailsStatus(true)
-      const queryString = searchParams.toString()
-      navigate(`productId/${id}?${queryString}`)
-    },
-    [navigate, searchParams],
-  )
-
-  const handleCloseDetails = () => {
-    setDetailsStatus(false)
-    navigate('/')
-    const search = searchParams.get('search')
-    if (search || search === '') {
-      setSearchParams({ search: searchQuery || '', page: currentPage.toString() })
-    }
-  }
+  const pages = data ? Math.ceil(data.total / 10) : 0
 
   const handlePagination = (page: number) => {
-    const params = new URLSearchParams(searchParams)
-    const q = searchParams.get('search') || ''
-    params.set('page', page.toString())
-    if (isDetailsOpen) {
-      handleCloseDetails()
+    if (pathname?.includes('productId')) {
+      router.push('/')
     }
-    handleSearch(q, page)
+    if (searchParams) {
+      const q = searchParams.get('search') || ''
+      handleSearch(q, page)
+    }
   }
 
   const handleSearch = (query: string, page: number) => {
-    if (isDetailsOpen) {
-      handleCloseDetails()
+    if (pathname?.includes('productId')) {
+      router.push('/')
     }
-
-    const params = new URLSearchParams(searchParams)
-    params.set('search', query)
-    params.set('page', page.toString())
-    setSearchParams(params)
+    if (searchParams) {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set('search', query)
+      params.set('page', page.toString())
+      router.push(`${pathname}?${params.toString()}`)
+    }
   }
 
-  const pages = data ? Math.ceil(data.total / 10) : 0
-
   useMemo(() => {
-    if (location.pathname.includes('productId')) {
-      setDetailsStatus(true)
-    }
     if (search || search === '') {
-      setSearchQuery(search)
       setCurrentPage(page)
     }
-  }, [location.pathname, page, search])
+  }, [page, search])
 
   return {
     isError,
     isLoading,
     isFetching,
     isSuccess,
-    isDetailsOpen,
-    productId,
     pages,
     selectedItems,
     searchResult: data?.list || [],
     currentPage,
-    handleOpenDetails,
-    handleCloseDetails,
     handlePagination,
     handleSearch,
     refetch,

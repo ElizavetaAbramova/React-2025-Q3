@@ -1,3 +1,4 @@
+'use client'
 import ProductCard from './ProductCard'
 import { type Item } from '../../types&interfaces/Item'
 import { useContext } from 'react'
@@ -9,7 +10,7 @@ export default function SearchResultBlock() {
 
   if (!context) return <p>Error: could not get response from server</p>
 
-  const { searchResult, productId, selectedItems } = context
+  const { searchResult, selectedItems } = context
 
   const renderContent = () => {
     if (searchResult.length !== 0) {
@@ -17,9 +18,8 @@ export default function SearchResultBlock() {
         <ProductCard
           key={item.id}
           data={item}
-          active={item.id === productId}
           checked={selectedItems.some((selected) => selected.id === item.id)}
-        />
+        ></ProductCard>
       ))
     }
   }

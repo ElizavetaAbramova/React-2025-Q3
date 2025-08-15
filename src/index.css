@@ -37,9 +37,13 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  /* padding: 20px; */
   min-width: 320px;
   min-height: 100vh;
+  /* height: calc(100vh - 40px); */
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: all 1s;
@@ -65,4 +69,10 @@ button {
 
 button:hover {
   border-color: var(--primary-color);
+}
+
+.footer {
+  width: calc(100% - 20px);
+  padding: 10px;
+  text-align: end;
 }

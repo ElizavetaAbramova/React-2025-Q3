@@ -1,11 +1,14 @@
+'use client'
 import '../../styles/theme-switcher.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { setTheme } from '../../features/theme/themeSlice'
 import type { RootState } from '../../store/store'
+import { useTranslations } from 'next-intl'
 
 export default function ThemeSwitcher() {
   const dispatch = useDispatch()
   const currentTheme = useSelector((state: RootState) => state.theme.mode)
+  const t = useTranslations('header')
 
   const handleClick = () => {
     const newTheme = currentTheme === 'light' ? 'dark' : 'light'
@@ -16,7 +19,7 @@ export default function ThemeSwitcher() {
 
   return (
     <button className="theme-switcher" onClick={handleClick} name="switcher">
-      {currentTheme === 'light' ? 'Dark theme' : 'Light theme'}
+      {`${currentTheme === 'light' ? t('dark') : t('light')} ${t('theme')}`}
     </button>
   )
 }
